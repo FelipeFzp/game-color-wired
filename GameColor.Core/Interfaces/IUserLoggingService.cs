@@ -8,5 +8,6 @@ namespace GameColor.Core.Interfaces
         void Log(string text);
         void LogLine(string text);
         void OnLogChange(Action<string> onLogChange);
+        void StopLogging();
     }
 }

@@ -4,6 +4,7 @@ using MetroFramework;
 using MetroFramework.Forms;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace GameColor.View.Views
@@ -54,6 +55,7 @@ namespace GameColor.View.Views
             Style = MetroColorStyle.Default;
         private void LoadDefaultData()
         {
+            TabControl_Presets.SelectedTab = Tab_Home;
             var availablePorts = CommunicationService.GetAvailableComs()
                                                             .ToList();
             ComboBox_Ports.DataSource = availablePorts;
@@ -97,17 +99,23 @@ namespace GameColor.View.Views
         }
         private void GameColor_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (_gamePresetService.IsRunning())
+                _gamePresetService.StopApplicationWatcher();
+
             if (_userPresetService.IsRunning())
                 _userPresetService.StopUserPreset();
 
-            if (_gamePresetService.IsRunning())
-                _gamePresetService.StopApplicationWatcher();
+            _userLoggingService.StopLogging();
         }
         private void Button_StartGamePreset_Click(object sender, EventArgs e)
         {
             if (ComboBox_GamePreset.SelectedItem != null && ComboBox_GamePreset.SelectedItem.ToString() != String.Empty)
             {
-                if(_gamePresetService.IsRunning())
+                if (_userPresetService.IsRunning())
+                {
+                    _userPresetService.StopUserPreset();
+                }
+                if (_gamePresetService.IsRunning())
                 {
                     _gamePresetService.StopApplicationWatcher();
                     Button_StartGamePreset.Text = "Start";

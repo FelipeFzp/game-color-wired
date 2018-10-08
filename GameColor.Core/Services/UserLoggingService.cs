@@ -1,6 +1,5 @@
 ﻿using GameColor.Core.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -12,29 +11,37 @@ namespace GameColor.Core.Services
         #region Properties
         private ObservableCollection<string> _logs = new ObservableCollection<string>();
         private Action<string> _onLogChange;
+        private bool _isStopped;
         #endregion
 
         #region Public Methods
         public void Log(string text)
         {
-            if (_logs.Count > 0)
+            if (!_isStopped)
             {
-                var lastLog = _logs.Last();
-                _logs.RemoveAt(_logs.Count - 1);
-                _logs.Add($"[{DateTime.Now.ToLongTimeString()}]: {lastLog + text}");
+                if (_logs.Count > 0)
+                {
+                    var lastLog = _logs.Last();
+                    _logs.RemoveAt(_logs.Count - 1);
+                    _logs.Add($"[{DateTime.Now.ToLongTimeString()}]: {lastLog + text}");
+                }
+                else LogLine(text);
             }
-            else LogLine(text);
-            
+
         }
-        public void LogLine(string text) =>
-            _logs.Add($"[{DateTime.Now.ToLongTimeString()}]: {text}");
+        public void LogLine(string text)
+        {
+            if (!_isStopped)
+                _logs.Add($"[{DateTime.Now.ToLongTimeString()}]: {text}");
+        }
         public void OnLogChange(Action<string> onLogChange)
         {
             ConfigureLogsWatchers();
             _onLogChange = onLogChange;
         }
+        public void StopLogging() =>
+            _isStopped = true;
         #endregion
-
 
         #region Private Methods
         private void ConfigureLogsWatchers() =>

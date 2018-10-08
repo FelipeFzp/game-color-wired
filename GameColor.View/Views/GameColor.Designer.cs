@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameColor));
             this.TabControl_Presets = new MetroFramework.Controls.MetroTabControl();
+            this.Tab_Home = new MetroFramework.Controls.MetroTabPage();
+            this.Tile_Settings = new MetroFramework.Controls.MetroTile();
             this.Tab_UserPreset = new MetroFramework.Controls.MetroTabPage();
             this.Checkbox_Blue = new MetroFramework.Controls.MetroCheckBox();
             this.Checkbox_Green = new MetroFramework.Controls.MetroCheckBox();
@@ -41,7 +43,11 @@
             this.Button_StartGamePreset = new System.Windows.Forms.Button();
             this.ComboBox_Ports = new MetroFramework.Controls.MetroComboBox();
             this.Label_PortErrorMessage = new System.Windows.Forms.Label();
+            this.Label_Slogan = new MetroFramework.Controls.MetroLabel();
+            this.Tile_Informations = new MetroFramework.Controls.MetroTile();
+            this.Tile_PresetsGenerator = new MetroFramework.Controls.MetroTile();
             this.TabControl_Presets.SuspendLayout();
+            this.Tab_Home.SuspendLayout();
             this.Tab_UserPreset.SuspendLayout();
             this.Tab_GamePreset.SuspendLayout();
             this.SuspendLayout();
@@ -51,14 +57,38 @@
             this.TabControl_Presets.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TabControl_Presets.Controls.Add(this.Tab_UserPreset);
+            this.TabControl_Presets.Controls.Add(this.Tab_Home);
             this.TabControl_Presets.Controls.Add(this.Tab_GamePreset);
-            this.TabControl_Presets.Location = new System.Drawing.Point(0, 63);
+            this.TabControl_Presets.Controls.Add(this.Tab_UserPreset);
+            this.TabControl_Presets.Location = new System.Drawing.Point(0, 76);
             this.TabControl_Presets.Name = "TabControl_Presets";
-            this.TabControl_Presets.SelectedIndex = 1;
-            this.TabControl_Presets.Size = new System.Drawing.Size(335, 235);
+            this.TabControl_Presets.SelectedIndex = 0;
+            this.TabControl_Presets.Size = new System.Drawing.Size(335, 242);
             this.TabControl_Presets.TabIndex = 0;
             this.TabControl_Presets.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.TabControl_Presets_Selecting);
+            // 
+            // Tab_Home
+            // 
+            this.Tab_Home.Controls.Add(this.Tile_PresetsGenerator);
+            this.Tab_Home.Controls.Add(this.Tile_Informations);
+            this.Tab_Home.Controls.Add(this.Tile_Settings);
+            this.Tab_Home.HorizontalScrollbarBarColor = true;
+            this.Tab_Home.Location = new System.Drawing.Point(4, 35);
+            this.Tab_Home.Name = "Tab_Home";
+            this.Tab_Home.Size = new System.Drawing.Size(327, 203);
+            this.Tab_Home.TabIndex = 2;
+            this.Tab_Home.Text = "Home";
+            this.Tab_Home.VerticalScrollbarBarColor = true;
+            // 
+            // Tile_Settings
+            // 
+            this.Tile_Settings.Location = new System.Drawing.Point(3, 5);
+            this.Tile_Settings.Name = "Tile_Settings";
+            this.Tile_Settings.Size = new System.Drawing.Size(182, 92);
+            this.Tile_Settings.TabIndex = 2;
+            this.Tile_Settings.Text = "Advanced Settings";
+            this.Tile_Settings.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.Tile_Settings.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
             // 
             // Tab_UserPreset
             // 
@@ -69,7 +99,7 @@
             this.Tab_UserPreset.Location = new System.Drawing.Point(4, 35);
             this.Tab_UserPreset.Name = "Tab_UserPreset";
             this.Tab_UserPreset.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.Tab_UserPreset.Size = new System.Drawing.Size(322, 196);
+            this.Tab_UserPreset.Size = new System.Drawing.Size(327, 203);
             this.Tab_UserPreset.TabIndex = 0;
             this.Tab_UserPreset.Text = "User Preset";
             this.Tab_UserPreset.VerticalScrollbarBarColor = true;
@@ -118,7 +148,7 @@
             this.Tab_GamePreset.HorizontalScrollbarBarColor = true;
             this.Tab_GamePreset.Location = new System.Drawing.Point(4, 35);
             this.Tab_GamePreset.Name = "Tab_GamePreset";
-            this.Tab_GamePreset.Size = new System.Drawing.Size(327, 196);
+            this.Tab_GamePreset.Size = new System.Drawing.Size(327, 203);
             this.Tab_GamePreset.TabIndex = 1;
             this.Tab_GamePreset.Text = "Game Preset";
             this.Tab_GamePreset.VerticalScrollbarBarColor = true;
@@ -137,7 +167,7 @@
             this.ListView_UserLog.LabelWrap = false;
             this.ListView_UserLog.Location = new System.Drawing.Point(7, 47);
             this.ListView_UserLog.Name = "ListView_UserLog";
-            this.ListView_UserLog.Size = new System.Drawing.Size(312, 144);
+            this.ListView_UserLog.Size = new System.Drawing.Size(312, 151);
             this.ListView_UserLog.TabIndex = 5;
             this.ListView_UserLog.UseCompatibleStateImageBehavior = false;
             this.ListView_UserLog.View = System.Windows.Forms.View.Details;
@@ -179,7 +209,7 @@
             this.ComboBox_Ports.DisplayMember = "Ports";
             this.ComboBox_Ports.FormattingEnabled = true;
             this.ComboBox_Ports.ItemHeight = 23;
-            this.ComboBox_Ports.Location = new System.Drawing.Point(250, 25);
+            this.ComboBox_Ports.Location = new System.Drawing.Point(250, 28);
             this.ComboBox_Ports.Name = "ComboBox_Ports";
             this.ComboBox_Ports.Size = new System.Drawing.Size(73, 29);
             this.ComboBox_Ports.TabIndex = 5;
@@ -192,17 +222,48 @@
             this.Label_PortErrorMessage.AutoSize = true;
             this.Label_PortErrorMessage.BackColor = System.Drawing.Color.Transparent;
             this.Label_PortErrorMessage.ForeColor = System.Drawing.Color.Red;
-            this.Label_PortErrorMessage.Location = new System.Drawing.Point(245, 57);
+            this.Label_PortErrorMessage.Location = new System.Drawing.Point(250, 60);
             this.Label_PortErrorMessage.Name = "Label_PortErrorMessage";
             this.Label_PortErrorMessage.Size = new System.Drawing.Size(73, 13);
             this.Label_PortErrorMessage.TabIndex = 5;
             this.Label_PortErrorMessage.Text = "Select an port";
             // 
+            // Label_Slogan
+            // 
+            this.Label_Slogan.AutoSize = true;
+            this.Label_Slogan.BackColor = System.Drawing.Color.Transparent;
+            this.Label_Slogan.Location = new System.Drawing.Point(24, 47);
+            this.Label_Slogan.Name = "Label_Slogan";
+            this.Label_Slogan.Size = new System.Drawing.Size(151, 19);
+            this.Label_Slogan.TabIndex = 6;
+            this.Label_Slogan.Text = "Intelligent Ambient Light";
+            // 
+            // Tile_Informations
+            // 
+            this.Tile_Informations.Location = new System.Drawing.Point(191, 5);
+            this.Tile_Informations.Name = "Tile_Informations";
+            this.Tile_Informations.Size = new System.Drawing.Size(133, 195);
+            this.Tile_Informations.TabIndex = 3;
+            this.Tile_Informations.Text = "Informations";
+            this.Tile_Informations.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.Tile_Informations.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
+            // 
+            // Tile_PresetsGenerator
+            // 
+            this.Tile_PresetsGenerator.Location = new System.Drawing.Point(3, 103);
+            this.Tile_PresetsGenerator.Name = "Tile_PresetsGenerator";
+            this.Tile_PresetsGenerator.Size = new System.Drawing.Size(182, 97);
+            this.Tile_PresetsGenerator.TabIndex = 4;
+            this.Tile_PresetsGenerator.Text = "Game Presets Creator";
+            this.Tile_PresetsGenerator.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.Tile_PresetsGenerator.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
+            // 
             // GameColor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(335, 298);
+            this.ClientSize = new System.Drawing.Size(335, 318);
+            this.Controls.Add(this.Label_Slogan);
             this.Controls.Add(this.Label_PortErrorMessage);
             this.Controls.Add(this.ComboBox_Ports);
             this.Controls.Add(this.TabControl_Presets);
@@ -212,6 +273,7 @@
             this.Text = "Game Color";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameColor_FormClosing);
             this.TabControl_Presets.ResumeLayout(false);
+            this.Tab_Home.ResumeLayout(false);
             this.Tab_UserPreset.ResumeLayout(false);
             this.Tab_UserPreset.PerformLayout();
             this.Tab_GamePreset.ResumeLayout(false);
@@ -234,5 +296,10 @@
         private System.Windows.Forms.Label Label_PortErrorMessage;
         private System.Windows.Forms.ListView ListView_UserLog;
         private System.Windows.Forms.ColumnHeader columnHeader1;
+        private MetroFramework.Controls.MetroTabPage Tab_Home;
+        private MetroFramework.Controls.MetroTile Tile_Settings;
+        private MetroFramework.Controls.MetroLabel Label_Slogan;
+        private MetroFramework.Controls.MetroTile Tile_Informations;
+        private MetroFramework.Controls.MetroTile Tile_PresetsGenerator;
     }
 }
