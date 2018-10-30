@@ -18,11 +18,20 @@ namespace GameColor.View
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Views.GameColor(kernel.Get<IUserPresetService>(), kernel.Get<IGamePresetService>(), kernel.Get<ICommunicationService>(), kernel.Get<IUserLoggingService>()));
+            Application.Run(new Views.GameColor(kernel.Get<IUserPresetService>(), 
+                                                kernel.Get<IGamePresetService>(), 
+                                                kernel.Get<ICommunicationService>(), 
+                                                kernel.Get<IUserLoggingService>(), 
+                                                kernel.Get<IConfigurationService>()));
         }
 
         static StandardKernel ConfigureDependencies(this StandardKernel kernel)
         {
+            kernel.Bind<IConfigurationService>()
+                  .To<ConfigurationService>()
+                  .InSingletonScope()
+                  .WithConstructorArgument("applicationExecutablePath", Application.ExecutablePath);
+
             kernel.Bind<ICommunicationService>()
                   .To<CommunicationService>()
                   .InSingletonScope();

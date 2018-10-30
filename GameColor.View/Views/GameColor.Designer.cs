@@ -28,28 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameColor));
             this.TabControl_Presets = new MetroFramework.Controls.MetroTabControl();
             this.Tab_Home = new MetroFramework.Controls.MetroTabPage();
+            this.Tile_PresetsGenerator = new MetroFramework.Controls.MetroTile();
+            this.Button_LaunchPresetsCreator = new System.Windows.Forms.Button();
+            this.Tile_Informations = new MetroFramework.Controls.MetroTile();
             this.Tile_Settings = new MetroFramework.Controls.MetroTile();
-            this.Tab_UserPreset = new MetroFramework.Controls.MetroTabPage();
-            this.Checkbox_Blue = new MetroFramework.Controls.MetroCheckBox();
-            this.Checkbox_Green = new MetroFramework.Controls.MetroCheckBox();
-            this.Checkbox_Red = new MetroFramework.Controls.MetroCheckBox();
+            this.Button_LaunchSettings = new System.Windows.Forms.Button();
             this.Tab_GamePreset = new MetroFramework.Controls.MetroTabPage();
             this.ListView_UserLog = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ComboBox_GamePreset = new MetroFramework.Controls.MetroComboBox();
             this.Button_StartGamePreset = new System.Windows.Forms.Button();
+            this.Tab_UserPreset = new MetroFramework.Controls.MetroTabPage();
+            this.Checkbox_Blue = new MetroFramework.Controls.MetroCheckBox();
+            this.Checkbox_Green = new MetroFramework.Controls.MetroCheckBox();
+            this.Checkbox_Red = new MetroFramework.Controls.MetroCheckBox();
             this.ComboBox_Ports = new MetroFramework.Controls.MetroComboBox();
             this.Label_PortErrorMessage = new System.Windows.Forms.Label();
             this.Label_Slogan = new MetroFramework.Controls.MetroLabel();
-            this.Tile_Informations = new MetroFramework.Controls.MetroTile();
-            this.Tile_PresetsGenerator = new MetroFramework.Controls.MetroTile();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TabControl_Presets.SuspendLayout();
             this.Tab_Home.SuspendLayout();
-            this.Tab_UserPreset.SuspendLayout();
+            this.Tile_PresetsGenerator.SuspendLayout();
+            this.Tile_Settings.SuspendLayout();
             this.Tab_GamePreset.SuspendLayout();
+            this.Tab_UserPreset.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl_Presets
@@ -62,7 +68,7 @@
             this.TabControl_Presets.Controls.Add(this.Tab_UserPreset);
             this.TabControl_Presets.Location = new System.Drawing.Point(0, 76);
             this.TabControl_Presets.Name = "TabControl_Presets";
-            this.TabControl_Presets.SelectedIndex = 0;
+            this.TabControl_Presets.SelectedIndex = 1;
             this.TabControl_Presets.Size = new System.Drawing.Size(335, 242);
             this.TabControl_Presets.TabIndex = 0;
             this.TabControl_Presets.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.TabControl_Presets_Selecting);
@@ -80,8 +86,46 @@
             this.Tab_Home.Text = "Home";
             this.Tab_Home.VerticalScrollbarBarColor = true;
             // 
+            // Tile_PresetsGenerator
+            // 
+            this.Tile_PresetsGenerator.Controls.Add(this.Button_LaunchPresetsCreator);
+            this.Tile_PresetsGenerator.Location = new System.Drawing.Point(3, 103);
+            this.Tile_PresetsGenerator.Name = "Tile_PresetsGenerator";
+            this.Tile_PresetsGenerator.Size = new System.Drawing.Size(182, 97);
+            this.Tile_PresetsGenerator.TabIndex = 4;
+            this.Tile_PresetsGenerator.Text = "Game Presets Creator";
+            this.Tile_PresetsGenerator.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.Tile_PresetsGenerator.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
+            // 
+            // Button_LaunchPresetsCreator
+            // 
+            this.Button_LaunchPresetsCreator.BackColor = System.Drawing.Color.Transparent;
+            this.Button_LaunchPresetsCreator.BackgroundImage = global::GameColor.View.Properties.Resources.Launch_icon;
+            this.Button_LaunchPresetsCreator.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Button_LaunchPresetsCreator.FlatAppearance.BorderSize = 0;
+            this.Button_LaunchPresetsCreator.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Button_LaunchPresetsCreator.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Button_LaunchPresetsCreator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_LaunchPresetsCreator.ForeColor = System.Drawing.Color.Transparent;
+            this.Button_LaunchPresetsCreator.Location = new System.Drawing.Point(159, 1);
+            this.Button_LaunchPresetsCreator.Name = "Button_LaunchPresetsCreator";
+            this.Button_LaunchPresetsCreator.Size = new System.Drawing.Size(20, 20);
+            this.Button_LaunchPresetsCreator.TabIndex = 0;
+            this.Button_LaunchPresetsCreator.UseVisualStyleBackColor = false;
+            // 
+            // Tile_Informations
+            // 
+            this.Tile_Informations.Location = new System.Drawing.Point(191, 5);
+            this.Tile_Informations.Name = "Tile_Informations";
+            this.Tile_Informations.Size = new System.Drawing.Size(133, 195);
+            this.Tile_Informations.TabIndex = 3;
+            this.Tile_Informations.Text = "Informations";
+            this.Tile_Informations.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.Tile_Informations.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
+            // 
             // Tile_Settings
             // 
+            this.Tile_Settings.Controls.Add(this.Button_LaunchSettings);
             this.Tile_Settings.Location = new System.Drawing.Point(3, 5);
             this.Tile_Settings.Name = "Tile_Settings";
             this.Tile_Settings.Size = new System.Drawing.Size(182, 92);
@@ -89,6 +133,87 @@
             this.Tile_Settings.Text = "Advanced Settings";
             this.Tile_Settings.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.Tile_Settings.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
+            this.Tile_Settings.Click += new System.EventHandler(this.Tile_Settings_Click);
+            // 
+            // Button_LaunchSettings
+            // 
+            this.Button_LaunchSettings.BackColor = System.Drawing.Color.Transparent;
+            this.Button_LaunchSettings.BackgroundImage = global::GameColor.View.Properties.Resources.Launch_icon;
+            this.Button_LaunchSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Button_LaunchSettings.FlatAppearance.BorderSize = 0;
+            this.Button_LaunchSettings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Button_LaunchSettings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Button_LaunchSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_LaunchSettings.ForeColor = System.Drawing.Color.Transparent;
+            this.Button_LaunchSettings.Location = new System.Drawing.Point(160, 1);
+            this.Button_LaunchSettings.Name = "Button_LaunchSettings";
+            this.Button_LaunchSettings.Size = new System.Drawing.Size(20, 20);
+            this.Button_LaunchSettings.TabIndex = 0;
+            this.Button_LaunchSettings.UseVisualStyleBackColor = false;
+            this.Button_LaunchSettings.Click += new System.EventHandler(this.Tile_Settings_Click);
+            // 
+            // Tab_GamePreset
+            // 
+            this.Tab_GamePreset.Controls.Add(this.ListView_UserLog);
+            this.Tab_GamePreset.Controls.Add(this.ComboBox_GamePreset);
+            this.Tab_GamePreset.Controls.Add(this.Button_StartGamePreset);
+            this.Tab_GamePreset.HorizontalScrollbarBarColor = true;
+            this.Tab_GamePreset.Location = new System.Drawing.Point(4, 35);
+            this.Tab_GamePreset.Name = "Tab_GamePreset";
+            this.Tab_GamePreset.Size = new System.Drawing.Size(327, 203);
+            this.Tab_GamePreset.TabIndex = 1;
+            this.Tab_GamePreset.Text = "Game Preset";
+            this.Tab_GamePreset.VerticalScrollbarBarColor = true;
+            // 
+            // ListView_UserLog
+            // 
+            this.ListView_UserLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ListView_UserLog.BackColor = System.Drawing.Color.SlateGray;
+            this.ListView_UserLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+            this.ListView_UserLog.ForeColor = System.Drawing.Color.White;
+            this.ListView_UserLog.FullRowSelect = true;
+            this.ListView_UserLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.ListView_UserLog.LabelWrap = false;
+            this.ListView_UserLog.Location = new System.Drawing.Point(7, 47);
+            this.ListView_UserLog.Name = "ListView_UserLog";
+            this.ListView_UserLog.Size = new System.Drawing.Size(312, 153);
+            this.ListView_UserLog.TabIndex = 5;
+            this.ListView_UserLog.UseCompatibleStateImageBehavior = false;
+            this.ListView_UserLog.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Width = 307;
+            // 
+            // ComboBox_GamePreset
+            // 
+            this.ComboBox_GamePreset.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.RecentlyUsedList;
+            this.ComboBox_GamePreset.DisplayMember = "fs";
+            this.ComboBox_GamePreset.FormattingEnabled = true;
+            this.ComboBox_GamePreset.ItemHeight = 23;
+            this.ComboBox_GamePreset.Items.AddRange(new object[] {
+            "",
+            "Fortnite",
+            "Minecraft"});
+            this.ComboBox_GamePreset.Location = new System.Drawing.Point(7, 12);
+            this.ComboBox_GamePreset.Name = "ComboBox_GamePreset";
+            this.ComboBox_GamePreset.Size = new System.Drawing.Size(206, 29);
+            this.ComboBox_GamePreset.Sorted = true;
+            this.ComboBox_GamePreset.TabIndex = 1;
+            // 
+            // Button_StartGamePreset
+            // 
+            this.Button_StartGamePreset.Enabled = false;
+            this.Button_StartGamePreset.Location = new System.Drawing.Point(241, 15);
+            this.Button_StartGamePreset.Name = "Button_StartGamePreset";
+            this.Button_StartGamePreset.Size = new System.Drawing.Size(73, 23);
+            this.Button_StartGamePreset.TabIndex = 3;
+            this.Button_StartGamePreset.Text = "Start";
+            this.Button_StartGamePreset.UseVisualStyleBackColor = true;
+            this.Button_StartGamePreset.Click += new System.EventHandler(this.Button_StartGamePreset_Click);
             // 
             // Tab_UserPreset
             // 
@@ -140,69 +265,6 @@
             this.Checkbox_Red.UseVisualStyleBackColor = true;
             this.Checkbox_Red.CheckedChanged += new System.EventHandler(this.Checkbox_Red_CheckedChanged);
             // 
-            // Tab_GamePreset
-            // 
-            this.Tab_GamePreset.Controls.Add(this.ListView_UserLog);
-            this.Tab_GamePreset.Controls.Add(this.ComboBox_GamePreset);
-            this.Tab_GamePreset.Controls.Add(this.Button_StartGamePreset);
-            this.Tab_GamePreset.HorizontalScrollbarBarColor = true;
-            this.Tab_GamePreset.Location = new System.Drawing.Point(4, 35);
-            this.Tab_GamePreset.Name = "Tab_GamePreset";
-            this.Tab_GamePreset.Size = new System.Drawing.Size(327, 203);
-            this.Tab_GamePreset.TabIndex = 1;
-            this.Tab_GamePreset.Text = "Game Preset";
-            this.Tab_GamePreset.VerticalScrollbarBarColor = true;
-            // 
-            // ListView_UserLog
-            // 
-            this.ListView_UserLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ListView_UserLog.BackColor = System.Drawing.Color.SlateGray;
-            this.ListView_UserLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-            this.ListView_UserLog.ForeColor = System.Drawing.Color.White;
-            this.ListView_UserLog.FullRowSelect = true;
-            this.ListView_UserLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.ListView_UserLog.LabelWrap = false;
-            this.ListView_UserLog.Location = new System.Drawing.Point(7, 47);
-            this.ListView_UserLog.Name = "ListView_UserLog";
-            this.ListView_UserLog.Size = new System.Drawing.Size(312, 151);
-            this.ListView_UserLog.TabIndex = 5;
-            this.ListView_UserLog.UseCompatibleStateImageBehavior = false;
-            this.ListView_UserLog.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Width = 307;
-            // 
-            // ComboBox_GamePreset
-            // 
-            this.ComboBox_GamePreset.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.RecentlyUsedList;
-            this.ComboBox_GamePreset.DisplayMember = "fs";
-            this.ComboBox_GamePreset.FormattingEnabled = true;
-            this.ComboBox_GamePreset.ItemHeight = 23;
-            this.ComboBox_GamePreset.Items.AddRange(new object[] {
-            "",
-            "Fortnite",
-            "Minecraft"});
-            this.ComboBox_GamePreset.Location = new System.Drawing.Point(7, 12);
-            this.ComboBox_GamePreset.Name = "ComboBox_GamePreset";
-            this.ComboBox_GamePreset.Size = new System.Drawing.Size(206, 29);
-            this.ComboBox_GamePreset.Sorted = true;
-            this.ComboBox_GamePreset.TabIndex = 1;
-            // 
-            // Button_StartGamePreset
-            // 
-            this.Button_StartGamePreset.Enabled = false;
-            this.Button_StartGamePreset.Location = new System.Drawing.Point(241, 15);
-            this.Button_StartGamePreset.Name = "Button_StartGamePreset";
-            this.Button_StartGamePreset.Size = new System.Drawing.Size(73, 23);
-            this.Button_StartGamePreset.TabIndex = 3;
-            this.Button_StartGamePreset.Text = "Start";
-            this.Button_StartGamePreset.UseVisualStyleBackColor = true;
-            this.Button_StartGamePreset.Click += new System.EventHandler(this.Button_StartGamePreset_Click);
-            // 
             // ComboBox_Ports
             // 
             this.ComboBox_Ports.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -238,25 +300,11 @@
             this.Label_Slogan.TabIndex = 6;
             this.Label_Slogan.Text = "Intelligent Ambient Light";
             // 
-            // Tile_Informations
+            // notifyIcon1
             // 
-            this.Tile_Informations.Location = new System.Drawing.Point(191, 5);
-            this.Tile_Informations.Name = "Tile_Informations";
-            this.Tile_Informations.Size = new System.Drawing.Size(133, 195);
-            this.Tile_Informations.TabIndex = 3;
-            this.Tile_Informations.Text = "Informations";
-            this.Tile_Informations.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.Tile_Informations.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
-            // 
-            // Tile_PresetsGenerator
-            // 
-            this.Tile_PresetsGenerator.Location = new System.Drawing.Point(3, 103);
-            this.Tile_PresetsGenerator.Name = "Tile_PresetsGenerator";
-            this.Tile_PresetsGenerator.Size = new System.Drawing.Size(182, 97);
-            this.Tile_PresetsGenerator.TabIndex = 4;
-            this.Tile_PresetsGenerator.Text = "Game Presets Creator";
-            this.Tile_PresetsGenerator.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.Tile_PresetsGenerator.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
             // 
             // GameColor
             // 
@@ -274,9 +322,11 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameColor_FormClosing);
             this.TabControl_Presets.ResumeLayout(false);
             this.Tab_Home.ResumeLayout(false);
+            this.Tile_PresetsGenerator.ResumeLayout(false);
+            this.Tile_Settings.ResumeLayout(false);
+            this.Tab_GamePreset.ResumeLayout(false);
             this.Tab_UserPreset.ResumeLayout(false);
             this.Tab_UserPreset.PerformLayout();
-            this.Tab_GamePreset.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -301,5 +351,8 @@
         private MetroFramework.Controls.MetroLabel Label_Slogan;
         private MetroFramework.Controls.MetroTile Tile_Informations;
         private MetroFramework.Controls.MetroTile Tile_PresetsGenerator;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.Button Button_LaunchSettings;
+        private System.Windows.Forms.Button Button_LaunchPresetsCreator;
     }
 }

@@ -33,6 +33,9 @@
     <Reference Include="ColorMine, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ColorMine.1.1.3.0\lib\ColorMine.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -44,21 +47,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\ConfigurationFile.cs" />
     <Compile Include="DllImports\Kernel32.cs" />
     <Compile Include="DllImports\User32.cs" />
     <Compile Include="Enums\EvaluationStrategy.cs" />
     <Compile Include="Helpers\BitmapExtensions.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Interfaces\ICommunicationService.cs" />
+    <Compile Include="Interfaces\IConfigurationService.cs" />
     <Compile Include="Interfaces\IGamePresetService.cs" />
     <Compile Include="Interfaces\IUserLoggingService.cs" />
     <Compile Include="Interfaces\IUserPresetService.cs" />
     <Compile Include="Models\BitwiseRgb.cs" />
     <Compile Include="Models\ColorExpression.cs" />
+    <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\ConfigurationStartWithWindows.cs" />
+    <Compile Include="Models\ConfigurationTurnOnWhenOpen.cs" />
     <Compile Include="Models\Screenshot.cs" />
     <Compile Include="Models\WatchedProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CommunicationService.cs" />
+    <Compile Include="Services\ConfigurationService.cs" />
     <Compile Include="Services\GamePresetService.cs" />
     <Compile Include="Services\UserLoggingService.cs" />
     <Compile Include="Services\UserPresetService.cs" />

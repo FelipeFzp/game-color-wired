@@ -69,6 +69,12 @@
     <Compile Include="Views\GameColor.Designer.cs">
       <DependentUpon>GameColor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\SettingsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\SettingsDialog.Designer.cs">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -77,9 +83,13 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Views\GameColor.resx">
       <DependentUpon>GameColor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\SettingsDialog.resx">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\GameColor.Core.Services.CommunicationService.datasource" />
@@ -98,8 +108,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\GameColor.ico" />
+    <Content Include="Resources\Launch-icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GameColor.Common\GameColor.Common.csproj">
+      <Project>{40A41795-4A7E-46C1-BC11-5A28602E38C5}</Project>
+      <Name>GameColor.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameColor.Core\GameColor.Core.csproj">
       <Project>{12D354A3-8BD8-4619-AA51-311C8086D512}</Project>
       <Name>GameColor.Core</Name>
