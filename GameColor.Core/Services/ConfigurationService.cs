@@ -1,9 +1,15 @@
 ﻿using GameColor.Core.Constants;
+using GameColor.Core.Helpers;
 using GameColor.Core.Interfaces;
 using GameColor.Core.Models;
+using Gma.System.MouseKeyHook;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace GameColor.Core.Services
 {
@@ -13,18 +19,23 @@ namespace GameColor.Core.Services
         #region Fields
         private readonly string _tempPath;
         private readonly string _applicationExecutablePath;
+
         private readonly IUserPresetService _userPresetService;
-        private readonly IUserLoggingService _userLoggingService;
+        private readonly IKeyboardMouseEvents _hooks;
+
         #endregion
 
         #region Constructor
-        public ConfigurationService(string applicationExecutablePath, IUserPresetService userPresetService, IUserLoggingService userLoggingService)
+        public ConfigurationService(string applicationExecutablePath, IUserPresetService userPresetService)
         {
-            _userLoggingService = userLoggingService;
-
             _userPresetService = userPresetService;
             _applicationExecutablePath = applicationExecutablePath;
+
             _tempPath = Path.GetTempPath();
+
+            _hooks = Hook.GlobalEvents();
+            _hooks.KeyDown += GlobalHookKeyPress;
+            _hooks.MouseDownExt += GlobalHookMouseDownExt;
         }
         #endregion
 
@@ -39,6 +50,10 @@ namespace GameColor.Core.Services
                 SetConfiguration(new Configuration());
             else
                 ApplyCurrentConfigurations(true);
+        }
+        public void DisposeConfigurations()
+        {
+            _hooks.Dispose();
         }
         public void SetConfiguration(Configuration configuration) =>
             File.WriteAllText($"{_tempPath}/GAME_COLOR_SETTINGS.json", configuration.ToString());
@@ -82,6 +97,37 @@ namespace GameColor.Core.Services
             }
 
             return null;
+        }
+
+        private void GlobalHookKeyPress(object sender, KeyEventArgs e)
+        {
+            var config = GetCurrentConfiguration();
+            var combination = e.Serialize();
+
+            if (config.Shortcuts.TurnOnRed == combination)
+                _userPresetService.ToggleRed();
+            if (config.Shortcuts.TurnOnGreen == combination)
+                _userPresetService.ToggleGreen();
+            if (config.Shortcuts.TurnOnBlue == combination)
+                _userPresetService.ToggleBlue();
+            if (config.Shortcuts.TurnOff == combination)
+                _userPresetService.ToggleColor(false, false, false);
+
+        }
+
+        private void GlobalHookMouseDownExt(object sender, MouseEventExtArgs e)
+        {
+            var config = GetCurrentConfiguration();
+            var combination = KeyCombination.MOUSE_RIGHT_CLICK_EVENT;
+
+            if(config.Shortcuts.TurnOnRed == combination)
+                _userPresetService.ToggleRed();
+            if (config.Shortcuts.TurnOnGreen == combination)
+                _userPresetService.ToggleGreen();
+            if (config.Shortcuts.TurnOnBlue == combination)
+                _userPresetService.ToggleBlue();
+            if (config.Shortcuts.TurnOff == combination)
+                _userPresetService.ToggleColor(false, false, false);
         }
         #endregion
     }

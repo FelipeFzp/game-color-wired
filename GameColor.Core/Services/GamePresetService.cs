@@ -73,6 +73,7 @@ namespace GameColor.Core.Services
                         _windowsProcess = null;
                         _windowsProcess = GetCurrentWindowsProcess();
                     }
+
                     Thread.Sleep(500);
                 }
             }); 
@@ -155,7 +156,7 @@ namespace GameColor.Core.Services
         {
             var rect = new User32.Rectangle();
             User32.GetWindowRect(_windowsProcess.MainWindowHandle, ref rect);
-            var bitmap = new Bitmap(_userProcess.Width, _userProcess.Height, PixelFormat.Format32bppArgb);
+            var bitmap = new System.Drawing.Bitmap(_userProcess.Width, _userProcess.Height, PixelFormat.Format32bppArgb);
 
             #region Debug
             //"Capturando tela...".LogLine();

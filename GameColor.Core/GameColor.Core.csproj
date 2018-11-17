@@ -33,12 +33,16 @@
     <Reference Include="ColorMine, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ColorMine.1.1.3.0\lib\ColorMine.dll</HintPath>
     </Reference>
+    <Reference Include="Gma.System.MouseKeyHook, Version=5.6.130.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MouseKeyHook.5.6.0\lib\net40\Gma.System.MouseKeyHook.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,11 +52,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\ConfigurationFile.cs" />
+    <Compile Include="Constants\KeyEvents.cs" />
     <Compile Include="DllImports\Kernel32.cs" />
     <Compile Include="DllImports\User32.cs" />
     <Compile Include="Enums\EvaluationStrategy.cs" />
-    <Compile Include="Helpers\BitmapExtensions.cs" />
+    <Compile Include="Helpers\Bitmap.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
+    <Compile Include="Helpers\KeyCombination.cs" />
     <Compile Include="Interfaces\ICommunicationService.cs" />
     <Compile Include="Interfaces\IConfigurationService.cs" />
     <Compile Include="Interfaces\IGamePresetService.cs" />
@@ -61,6 +67,7 @@
     <Compile Include="Models\BitwiseRgb.cs" />
     <Compile Include="Models\ColorExpression.cs" />
     <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\ConfigurationShortcuts.cs" />
     <Compile Include="Models\ConfigurationStartWithWindows.cs" />
     <Compile Include="Models\ConfigurationTurnOnWhenOpen.cs" />
     <Compile Include="Models\Screenshot.cs" />

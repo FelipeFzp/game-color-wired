@@ -7,6 +7,7 @@ namespace GameColor.Core.Models
         #region Properties
         public ConfigurationStartWithWindows StartWithWindows { get; set; }
         public ConfigurationTurnOnWhenOpen TurnOnWhenOpen { get; set; }
+        public ConfigurationShortcuts Shortcuts { get; set; }
         #endregion
 
         #region Constructors
@@ -14,6 +15,7 @@ namespace GameColor.Core.Models
         {
             StartWithWindows = new ConfigurationStartWithWindows();
             TurnOnWhenOpen = new ConfigurationTurnOnWhenOpen();
+            Shortcuts = new ConfigurationShortcuts();
         }
         #endregion
 

@@ -1,11 +1,8 @@
-﻿using GameColor.Common.Enums;
-using GameColor.Core.Interfaces;
+﻿using GameColor.Core.Interfaces;
 using GameColor.Core.Services;
 using MetroFramework;
 using MetroFramework.Forms;
 using System;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,15 +11,19 @@ namespace GameColor.View.Views
     public partial class GameColor : MetroForm
     {
         #region Properties
-        private IUserPresetService _userPresetService;
-        private IGamePresetService _gamePresetService;
-        private ICommunicationService _communicationService;
-        private IUserLoggingService _userLoggingService;
-        private IConfigurationService _configurationService;
+        private readonly IUserPresetService _userPresetService;
+        private readonly IGamePresetService _gamePresetService;
+        private readonly ICommunicationService _communicationService;
+        private readonly IUserLoggingService _userLoggingService;
+        private readonly IConfigurationService _configurationService;
         #endregion
 
         #region Constructor
-        public GameColor(IUserPresetService userPresetService, IGamePresetService gamePresetService, ICommunicationService communicationService, IUserLoggingService userLoggingService, IConfigurationService configurationService)
+        public GameColor(IUserPresetService userPresetService, 
+            IGamePresetService gamePresetService, 
+            ICommunicationService communicationService, 
+            IUserLoggingService userLoggingService, 
+            IConfigurationService configurationService)
         {
             _userPresetService = userPresetService;
             _gamePresetService = gamePresetService;
@@ -31,7 +32,9 @@ namespace GameColor.View.Views
             _configurationService = configurationService;
 
             InitializeComponent();
+
             ConfigureLogs();
+
             LoadConfiguration();
             LoadDefaultControlsData();
         }
@@ -63,11 +66,11 @@ namespace GameColor.View.Views
         private void LoadDefaultControlsData()
         {
             TabControl_Presets.SelectedTab = Tab_Home;
-            var availablePorts = CommunicationService.GetAvailableComs()
-                                                            .ToList();
+
+            var availablePorts = CommunicationService.GetAvailableCom();
             ComboBox_Ports.DataSource = availablePorts;
 
-            if (availablePorts.Count() == 1)
+            if (availablePorts.Count > 1)
                 ComboBox_Ports.SelectedIndex = 0;
         }
         private void ConfigureLogs()
@@ -91,7 +94,6 @@ namespace GameColor.View.Views
         {
             var currentConfiguration = _configurationService.GetCurrentConfiguration();
 
-
             new Task(async () =>
             {
                 //This delay wait for USB verification, without this, Led tape dont turn on
@@ -106,9 +108,9 @@ namespace GameColor.View.Views
                     Checkbox_Green.Checked = currentConfiguration.TurnOnWhenOpen.Green;
                 });
                 Checkbox_Blue.Invoke((MethodInvoker)delegate
-               {
-                   Checkbox_Blue.Checked = currentConfiguration.TurnOnWhenOpen.Blue;
-               });
+                {
+                    Checkbox_Blue.Checked = currentConfiguration.TurnOnWhenOpen.Blue;
+                });
             }).Start();
         }
         #endregion
@@ -116,25 +118,21 @@ namespace GameColor.View.Views
         #region Events
         private void Checkbox_Red_CheckedChanged(object sender, EventArgs e)
         {
-            _userLoggingService.LogLine("Red...");
             _userPresetService.ToggleRed();
             ChangeMetroStyle();
         }
         private void Checkbox_Green_CheckedChanged(object sender, EventArgs e)
         {
-            _userLoggingService.LogLine("Green...");
             _userPresetService.ToggleGreen();
             ChangeMetroStyle();
         }
         private void Checkbox_Blue_CheckedChanged(object sender, EventArgs e)
         {
-            _userLoggingService.LogLine("Blue...");
             _userPresetService.ToggleBlue();
             ChangeMetroStyle();
         }
         private void GameColor_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _userLoggingService.LogLine("Forming closing...");
             if (_gamePresetService.IsRunning())
                 _gamePresetService.StopApplicationWatcher();
 
@@ -142,6 +140,7 @@ namespace GameColor.View.Views
                 _userPresetService.StopUserPreset();
 
             _userLoggingService.StopLogging();
+            _configurationService.DisposeConfigurations();
         }
         private void Button_StartGamePreset_Click(object sender, EventArgs e)
         {
@@ -169,23 +168,23 @@ namespace GameColor.View.Views
         {
             if (TabControl_Presets.SelectedTab.Name == Tab_UserPreset.Name)
             {
-                _userLoggingService.LogLine("Click tab...");
                 if (_gamePresetService.IsRunning())
                 {
-                    _userLoggingService.LogLine("Stop Game...");
                     _gamePresetService.StopApplicationWatcher();
                     Button_StartGamePreset.Text = "Start";
                 }
 
-                _userLoggingService.LogLine("Turn on lights from Toggle Color tab...");
                 _userPresetService.ToggleColor(Checkbox_Red.Checked, Checkbox_Green.Checked, Checkbox_Blue.Checked);
                 ChangeMetroStyle();
             }
         }
         private void ComboBox_Ports_Click(object sender, EventArgs e)
         {
-            ComboBox_Ports.DataSource = CommunicationService.GetAvailableComs()
-                                                            .ToList();
+            var availablePorts = CommunicationService.GetAvailableCom();
+            ComboBox_Ports.DataSource = availablePorts;
+
+            if (availablePorts.Count > 1)
+                ComboBox_Ports.SelectedIndex = 0;
         }
         private void ComboBox_Ports_SelectedValueChanged(object sender, EventArgs e)
         {
@@ -194,7 +193,6 @@ namespace GameColor.View.Views
             {
                 _communicationService.BindPort(port);
                 _communicationService.TestConnection();
-                _userLoggingService.LogLine("Serial port defined...");
 
                 Label_PortErrorMessage.Visible = false;
                 Checkbox_Red.Enabled = true;
@@ -210,10 +208,8 @@ namespace GameColor.View.Views
             else
                 Label_PortErrorMessage.Visible = true;
         }
-
         private void Tile_Settings_Click(object sender, EventArgs e) =>
             new SettingsDialog(_configurationService).ShowDialog();
-
         private void HandlePortsComboBoxValueChanged()
         {
             var port = ComboBox_Ports.SelectedItem?.ToString();
@@ -232,5 +228,8 @@ namespace GameColor.View.Views
         private void HandlePortsComboBoxInitialization() =>
             ConfigureUserPreferences();
         #endregion
+
+        private void TabControl_Presets_KeyDown(object sender, KeyEventArgs e) =>
+            e.Handled = true;
     }
 }

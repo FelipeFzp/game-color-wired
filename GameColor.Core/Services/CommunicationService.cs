@@ -1,16 +1,21 @@
 ﻿using GameColor.Common.Enums;
 using GameColor.Core.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GameColor.Core.Services
 {
     public class CommunicationService : ICommunicationService
     {
         #region Fields
+        private const int TIMEOUT = 100;
+
         private readonly IUserLoggingService _userLoggingService;
-        private SerialPort _serial;
+
+        private SerialPort SerialPort;
         #endregion
 
         #region Constructor
@@ -19,23 +24,20 @@ namespace GameColor.Core.Services
         #endregion
 
         #region Public Methods
-        public void BindPort(string comPort) =>
-            _serial = new SerialPort(comPort, 9600);
+        public void BindPort(string comPort, int writeTimeout = TIMEOUT, int readTimeout = TIMEOUT)
+        {
+            SerialPort = new SerialPort(comPort, 9600);
+            SerialPort.WriteTimeout = writeTimeout;
+            SerialPort.ReadTimeout = readTimeout;
+        }
         public string GetBindedPort() =>
-            _serial != null ? _serial.PortName : String.Empty;
+            SerialPort != null ? SerialPort.PortName : String.Empty;
         public bool TestConnection()
         {
-            var exception = default(Exception);
-            try
-            {
-                SendData(' ');
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
+            try { SendData(' '); }
+            catch { return false; }
 
-            return exception != null;
+            return true;
         }
         public void TurnOffLights() =>
             SendData('X');
@@ -46,17 +48,17 @@ namespace GameColor.Core.Services
         #region Private Methods
         private void SendData(char data)
         {
-            if(_serial != null)
+            if (SerialPort != null)
             {
                 try
                 {
-                    if (!_serial.IsOpen)
-                        _serial.Open();
+                    if (!SerialPort.IsOpen)
+                        SerialPort.Open();
 
-                    _serial.WriteLine(data.ToString());
-                    _serial.Close();
+                    SerialPort.WriteLine(data.ToString());
+                    SerialPort.Close();
                 }
-                catch(Exception e)
+                catch
                 {
                     _userLoggingService.LogLine("Could not send command...");
                 }
@@ -65,8 +67,12 @@ namespace GameColor.Core.Services
         #endregion
 
         #region Static Methods
-        public static string[] GetAvailableComs() =>
-          SerialPort.GetPortNames();
+        //TODO: implementar splash screen na aplicação e exibir somente portas com o hardware connectado
+        //é uma operação pesadas, por isso deve ser feita apenas na inicialização, remover chamada do evento de click do combobox
+        public static List<string> GetAvailableCom() =>
+            SerialPort.GetPortNames()
+                      .OrderBy(p => p)
+                      .ToList();
         #endregion
     }
 }

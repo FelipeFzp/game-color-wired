@@ -3,12 +3,12 @@ using System.Drawing;
 
 namespace GameColor.Core.Helpers
 {
-    public static class BitmapExtensions
+    public static class Bitmap
     {
-        public static Graphics ToGraphics(this Bitmap image) =>
+        public static Graphics ToGraphics(this System.Drawing.Bitmap image) =>
             Graphics.FromImage(image);
 
-        public static void MarkPixel(this Bitmap bitmap, int x, int y, AcceptedColor color)
+        public static void MarkPixel(this System.Drawing.Bitmap bitmap, int x, int y, AcceptedColor color)
         {
             var knownColor = Color.Transparent;
             switch (color)

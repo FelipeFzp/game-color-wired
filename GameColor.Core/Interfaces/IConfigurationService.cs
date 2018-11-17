@@ -6,6 +6,7 @@ namespace GameColor.Core.Interfaces
     {
         Configuration GetCurrentConfiguration();
         void SetConfiguration(Configuration configuration);
+        void DisposeConfigurations();
         void SetDefaultConfiguration(bool reset = false);
         void ApplyCurrentConfigurations(bool isStartup = false);
     }
