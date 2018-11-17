@@ -1,5 +1,6 @@
 ﻿using GameColor.Common.Enums;
 using GameColor.Core.Interfaces;
+using System;
 using System.Threading;
 
 namespace GameColor.Core.Services
@@ -7,6 +8,10 @@ namespace GameColor.Core.Services
     public class UserPresetService : IUserPresetService
     {
         private readonly ICommunicationService _communicationService;
+
+        private Action<bool> _onRedChange;
+        private Action<bool> _onGreenChange;
+        private Action<bool> _onBlueChange;
 
         private bool _isStopped;
         private bool _red;
@@ -25,25 +30,58 @@ namespace GameColor.Core.Services
             _green = green;
             _blue = blue;
 
+            if (_onRedChange != null)
+                _onRedChange.Invoke(_red);
+
+            if (_onGreenChange != null)
+                _onGreenChange.Invoke(_green);
+
+            if (_onBlueChange != null)
+                _onBlueChange.Invoke(_blue);
+
             Send();
         }
-        public void StopUserPreset() =>
+        public void StopUserPreset()
+        {
             _communicationService.TurnOffLights();
+            _isStopped = true;
+        }
         public void ToggleRed()
         {
             _red = !_red;
+
+            if (_onRedChange != null)
+                _onRedChange.Invoke(_red);
+
             Send();
         }
         public void ToggleGreen()
         {
             _green = !_green;
+
+            if (_onGreenChange != null)
+                _onGreenChange.Invoke(_green);
+
             Send();
         }
         public void ToggleBlue()
         {
             _blue = !_blue;
+
+            if (_onBlueChange != null)
+                _onBlueChange.Invoke(_blue);
+
             Send();
         }
+
+        public void OnRedChange(Action<bool> onRedChange) => 
+            _onRedChange = onRedChange;
+
+        public void OnGreenChange(Action<bool> onGreenChange) =>
+            _onGreenChange = onGreenChange;
+
+        public void OnBlueChange(Action<bool> onBoolChange) =>
+            _onBlueChange = onBoolChange;
         #endregion
 
         #region Private Methods

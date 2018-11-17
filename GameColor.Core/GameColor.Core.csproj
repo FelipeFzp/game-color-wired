@@ -52,7 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\ConfigurationFile.cs" />
-    <Compile Include="Constants\KeyEvents.cs" />
+    <Compile Include="Constants\MouseEvents.cs" />
+    <Compile Include="Constants\MainArgs.cs" />
     <Compile Include="DllImports\Kernel32.cs" />
     <Compile Include="DllImports\User32.cs" />
     <Compile Include="Enums\EvaluationStrategy.cs" />

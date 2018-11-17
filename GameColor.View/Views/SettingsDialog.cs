@@ -115,26 +115,26 @@ namespace GameColor.View.Views
 
         private void TextBox_ShortcutRed_Click(object sender, EventArgs e)
         {
-            _configuration.Shortcuts.TurnOnRed = KeyEvents.MOUSE_RIGHT_CLICK_EVENT;
-            TextBox_ShortcutRed.Text = KeyEvents.MOUSE_RIGHT_CLICK_EVENT;
+            _configuration.Shortcuts.TurnOnRed = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
+            TextBox_ShortcutRed.Text = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
         }
 
         private void TextBox_ShortcutGreen_Click(object sender, EventArgs e)
         {
-            _configuration.Shortcuts.TurnOnGreen = KeyEvents.MOUSE_RIGHT_CLICK_EVENT;
-            TextBox_ShortcutGreen.Text = KeyEvents.MOUSE_RIGHT_CLICK_EVENT;
+            _configuration.Shortcuts.TurnOnGreen = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
+            TextBox_ShortcutGreen.Text = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
         }
 
         private void TextBox_ShortcutBlue_Click(object sender, EventArgs e)
         {
-            _configuration.Shortcuts.TurnOnBlue = KeyEvents.MOUSE_RIGHT_CLICK_EVENT;
-            TextBox_ShortcutBlue.Text = KeyEvents.MOUSE_RIGHT_CLICK_EVENT;
+            _configuration.Shortcuts.TurnOnBlue = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
+            TextBox_ShortcutBlue.Text = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
         }
 
         private void TextBox_ShortcutTurnOff_Click(object sender, EventArgs e)
         {
-            _configuration.Shortcuts.TurnOff = KeyEvents.MOUSE_RIGHT_CLICK_EVENT;
-            TextBox_ShortcutTurnOff.Text = KeyEvents.MOUSE_RIGHT_CLICK_EVENT;
+            _configuration.Shortcuts.TurnOff = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
+            TextBox_ShortcutTurnOff.Text = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
         }
         #endregion
 

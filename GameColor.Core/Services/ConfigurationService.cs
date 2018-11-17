@@ -5,31 +5,30 @@ using GameColor.Core.Models;
 using Gma.System.MouseKeyHook;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace GameColor.Core.Services
 {
     public class ConfigurationService : IConfigurationService
     {
-
         #region Fields
         private readonly string _tempPath;
         private readonly string _applicationExecutablePath;
 
         private readonly IUserPresetService _userPresetService;
+        private readonly IGamePresetService _gamePresetService;
         private readonly IKeyboardMouseEvents _hooks;
 
         #endregion
 
         #region Constructor
-        public ConfigurationService(string applicationExecutablePath, IUserPresetService userPresetService)
+        public ConfigurationService(string applicationExecutablePath, IUserPresetService userPresetService, IGamePresetService gamePresetService)
         {
-            _userPresetService = userPresetService;
             _applicationExecutablePath = applicationExecutablePath;
+
+            _userPresetService = userPresetService;
+            _gamePresetService = gamePresetService;
 
             _tempPath = Path.GetTempPath();
 
@@ -56,7 +55,7 @@ namespace GameColor.Core.Services
             _hooks.Dispose();
         }
         public void SetConfiguration(Configuration configuration) =>
-            File.WriteAllText($"{_tempPath}/GAME_COLOR_SETTINGS.json", configuration.ToString());
+            File.WriteAllText($"{_tempPath}/{ConfigurationFile.CONFIG_FILE_NAME}.json", configuration.ToString());
         public void ApplyCurrentConfigurations(bool isStartup = false)
         {
             var configuration = DeserializeConfigurationFile();
@@ -67,7 +66,7 @@ namespace GameColor.Core.Services
                 {
                     Registry.CurrentUser
                             .OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)
-                            .SetValue(ConfigurationFile.REGISTER_APPLICATION_NAME, _applicationExecutablePath);
+                            .SetValue(ConfigurationFile.REGISTER_APPLICATION_NAME, $"{_applicationExecutablePath} {MainArgs.IS_WIN_INITIALIZATION}");
 
 
                 }
@@ -104,30 +103,35 @@ namespace GameColor.Core.Services
             var config = GetCurrentConfiguration();
             var combination = e.Serialize();
 
-            if (config.Shortcuts.TurnOnRed == combination)
-                _userPresetService.ToggleRed();
-            if (config.Shortcuts.TurnOnGreen == combination)
-                _userPresetService.ToggleGreen();
-            if (config.Shortcuts.TurnOnBlue == combination)
-                _userPresetService.ToggleBlue();
-            if (config.Shortcuts.TurnOff == combination)
-                _userPresetService.ToggleColor(false, false, false);
-
+            if (!_gamePresetService.IsRunning())
+            {
+                if (config.Shortcuts.TurnOnRed == combination)
+                    _userPresetService.ToggleRed();
+                if (config.Shortcuts.TurnOnGreen == combination)
+                    _userPresetService.ToggleGreen();
+                if (config.Shortcuts.TurnOnBlue == combination)
+                    _userPresetService.ToggleBlue();
+                if (config.Shortcuts.TurnOff == combination)
+                    _userPresetService.ToggleColor(false, false, false);
+            }
         }
 
         private void GlobalHookMouseDownExt(object sender, MouseEventExtArgs e)
         {
             var config = GetCurrentConfiguration();
-            var combination = KeyCombination.MOUSE_RIGHT_CLICK_EVENT;
+            var combination = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
 
-            if(config.Shortcuts.TurnOnRed == combination)
-                _userPresetService.ToggleRed();
-            if (config.Shortcuts.TurnOnGreen == combination)
-                _userPresetService.ToggleGreen();
-            if (config.Shortcuts.TurnOnBlue == combination)
-                _userPresetService.ToggleBlue();
-            if (config.Shortcuts.TurnOff == combination)
-                _userPresetService.ToggleColor(false, false, false);
+            if(!_gamePresetService.IsRunning())
+            {
+                if (config.Shortcuts.TurnOnRed == combination)
+                    _userPresetService.ToggleRed();
+                if (config.Shortcuts.TurnOnGreen == combination)
+                    _userPresetService.ToggleGreen();
+                if (config.Shortcuts.TurnOnBlue == combination)
+                    _userPresetService.ToggleBlue();
+                if (config.Shortcuts.TurnOff == combination)
+                    _userPresetService.ToggleColor(false, false, false);
+            }
         }
         #endregion
     }

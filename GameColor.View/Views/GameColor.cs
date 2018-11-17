@@ -11,6 +11,7 @@ namespace GameColor.View.Views
     public partial class GameColor : MetroForm
     {
         #region Properties
+        private readonly bool _initializateBySystem;
         private readonly IUserPresetService _userPresetService;
         private readonly IGamePresetService _gamePresetService;
         private readonly ICommunicationService _communicationService;
@@ -19,21 +20,22 @@ namespace GameColor.View.Views
         #endregion
 
         #region Constructor
-        public GameColor(IUserPresetService userPresetService, 
-            IGamePresetService gamePresetService, 
-            ICommunicationService communicationService, 
-            IUserLoggingService userLoggingService, 
-            IConfigurationService configurationService)
+        public GameColor(IUserPresetService userPresetService,
+            IGamePresetService gamePresetService,
+            ICommunicationService communicationService,
+            IUserLoggingService userLoggingService,
+            IConfigurationService configurationService, bool initializateBySystem)
         {
             _userPresetService = userPresetService;
             _gamePresetService = gamePresetService;
             _communicationService = communicationService;
             _userLoggingService = userLoggingService;
             _configurationService = configurationService;
+            _initializateBySystem = initializateBySystem;
 
             InitializeComponent();
 
-            ConfigureLogs();
+            ConfigureViewEvents();
 
             LoadConfiguration();
             LoadDefaultControlsData();
@@ -73,8 +75,9 @@ namespace GameColor.View.Views
             if (availablePorts.Count > 1)
                 ComboBox_Ports.SelectedIndex = 0;
         }
-        private void ConfigureLogs()
+        private void ConfigureViewEvents()
         {
+            #region Logs
             _userLoggingService.OnLogChange((string log) =>
             {
                 ListView_UserLog.Invoke((MethodInvoker)delegate
@@ -89,29 +92,59 @@ namespace GameColor.View.Views
                     ListView_UserLog.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                 });
             });
+            #endregion
+
+            #region Colors Checkboxes
+            _userPresetService.OnRedChange((bool red) =>
+            {
+                Checkbox_Red.CheckedChanged -= Checkbox_Red_CheckedChanged;
+                Checkbox_Red.Checked = red;
+                Checkbox_Red.CheckedChanged += Checkbox_Red_CheckedChanged;
+                ChangeMetroStyle();
+            });
+
+            _userPresetService.OnGreenChange((bool green) =>
+            {
+                Checkbox_Green.CheckedChanged -= Checkbox_Green_CheckedChanged;
+                Checkbox_Green.Checked = green;
+                Checkbox_Green.CheckedChanged += Checkbox_Green_CheckedChanged;
+                ChangeMetroStyle();
+            });
+
+            _userPresetService.OnBlueChange((bool blue) =>
+            {
+                Checkbox_Blue.CheckedChanged -= Checkbox_Blue_CheckedChanged;
+                Checkbox_Blue.Checked = blue;
+                Checkbox_Blue.CheckedChanged += Checkbox_Blue_CheckedChanged;
+                ChangeMetroStyle();
+            });
+            #endregion
         }
         private void ConfigureUserPreferences()
         {
             var currentConfiguration = _configurationService.GetCurrentConfiguration();
 
-            new Task(async () =>
+            Task.Run(async () =>
             {
-                //This delay wait for USB verification, without this, Led tape dont turn on
-                await Task.Delay(2000);
+                //This delay wait for system COMS driver initialization
+                if (_initializateBySystem) await Task.Delay(2000);
 
                 Checkbox_Red.Invoke((MethodInvoker)delegate
                 {
-                    Checkbox_Red.Checked = currentConfiguration.TurnOnWhenOpen.Red;
+                    if (currentConfiguration.TurnOnWhenOpen.Red)
+                        Checkbox_Red.Checked = currentConfiguration.TurnOnWhenOpen.Red;
                 });
                 Checkbox_Green.Invoke((MethodInvoker)delegate
                 {
-                    Checkbox_Green.Checked = currentConfiguration.TurnOnWhenOpen.Green;
+                    if (currentConfiguration.TurnOnWhenOpen.Green)
+                        Checkbox_Green.Checked = currentConfiguration.TurnOnWhenOpen.Green;
                 });
                 Checkbox_Blue.Invoke((MethodInvoker)delegate
                 {
-                    Checkbox_Blue.Checked = currentConfiguration.TurnOnWhenOpen.Blue;
+                    if (currentConfiguration.TurnOnWhenOpen.Blue)
+                        Checkbox_Blue.Checked = currentConfiguration.TurnOnWhenOpen.Blue;
                 });
-            }).Start();
+            });
         }
         #endregion
 
@@ -147,9 +180,8 @@ namespace GameColor.View.Views
             if (ComboBox_GamePreset.SelectedItem != null && ComboBox_GamePreset.SelectedItem.ToString() != String.Empty)
             {
                 if (_userPresetService.IsRunning())
-                {
                     _userPresetService.StopUserPreset();
-                }
+
                 if (_gamePresetService.IsRunning())
                 {
                     _gamePresetService.StopApplicationWatcher();
