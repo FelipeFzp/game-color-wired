@@ -56,6 +56,7 @@
     <Compile Include="Constants\MainArgs.cs" />
     <Compile Include="DllImports\Kernel32.cs" />
     <Compile Include="DllImports\User32.cs" />
+    <Compile Include="Enums\AcceptedColor.cs" />
     <Compile Include="Enums\EvaluationStrategy.cs" />
     <Compile Include="Helpers\Bitmap.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
@@ -82,12 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GameColor.Common\GameColor.Common.csproj">
-      <Project>{40A41795-4A7E-46C1-BC11-5A28602E38C5}</Project>
-      <Name>GameColor.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,5 @@
 ﻿using ColorMine.ColorSpaces;
-using GameColor.Common.Enums;
+using GameColor.Core.Enums;
 using GameColor.Core.DllImports;
 using GameColor.Core.Enums;
 using GameColor.Core.Helpers;
