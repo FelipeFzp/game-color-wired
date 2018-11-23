@@ -1,4 +1,4 @@
-﻿using GameColor.Common.Enums;
+﻿using GameColor.Core.Enums;
 using GameColor.Core.Interfaces;
 using System;
 using System.Threading;

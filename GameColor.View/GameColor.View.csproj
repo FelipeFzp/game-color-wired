@@ -116,10 +116,6 @@
     <Content Include="Resources\Launch-icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameColor.Common\GameColor.Common.csproj">
-      <Project>{40A41795-4A7E-46C1-BC11-5A28602E38C5}</Project>
-      <Name>GameColor.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GameColor.Core\GameColor.Core.csproj">
       <Project>{12D354A3-8BD8-4619-AA51-311C8086D512}</Project>
       <Name>GameColor.Core</Name>

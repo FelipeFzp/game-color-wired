@@ -1,4 +1,4 @@
-﻿using GameColor.Common.Enums;
+﻿using GameColor.Core.Enums;
 using System.Drawing;
 
 namespace GameColor.Core.Helpers
