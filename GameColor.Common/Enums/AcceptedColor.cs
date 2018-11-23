@@ -1,4 +1,4 @@
-﻿namespace GameColor.Common.Enums
+﻿namespace GameColor.Core.Enums
 {
     public enum AcceptedColor
     {
