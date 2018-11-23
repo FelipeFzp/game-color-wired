@@ -36,15 +36,15 @@
             this.Tile_Informations = new MetroFramework.Controls.MetroTile();
             this.Tile_Settings = new MetroFramework.Controls.MetroTile();
             this.Button_LaunchSettings = new System.Windows.Forms.Button();
-            this.Tab_UserPreset = new MetroFramework.Controls.MetroTabPage();
-            this.Checkbox_Blue = new MetroFramework.Controls.MetroCheckBox();
-            this.Checkbox_Green = new MetroFramework.Controls.MetroCheckBox();
-            this.Checkbox_Red = new MetroFramework.Controls.MetroCheckBox();
             this.Tab_GamePreset = new MetroFramework.Controls.MetroTabPage();
             this.ListView_UserLog = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ComboBox_GamePreset = new MetroFramework.Controls.MetroComboBox();
             this.Button_StartGamePreset = new System.Windows.Forms.Button();
+            this.Tab_UserPreset = new MetroFramework.Controls.MetroTabPage();
+            this.Checkbox_Blue = new MetroFramework.Controls.MetroCheckBox();
+            this.Checkbox_Green = new MetroFramework.Controls.MetroCheckBox();
+            this.Checkbox_Red = new MetroFramework.Controls.MetroCheckBox();
             this.ComboBox_Ports = new MetroFramework.Controls.MetroComboBox();
             this.Label_PortErrorMessage = new System.Windows.Forms.Label();
             this.Label_Slogan = new MetroFramework.Controls.MetroLabel();
@@ -52,8 +52,8 @@
             this.Tab_Home.SuspendLayout();
             this.Tile_PresetsGenerator.SuspendLayout();
             this.Tile_Settings.SuspendLayout();
-            this.Tab_UserPreset.SuspendLayout();
             this.Tab_GamePreset.SuspendLayout();
+            this.Tab_UserPreset.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl_Presets
@@ -151,56 +151,6 @@
             this.Button_LaunchSettings.UseVisualStyleBackColor = false;
             this.Button_LaunchSettings.Click += new System.EventHandler(this.Tile_Settings_Click);
             // 
-            // Tab_UserPreset
-            // 
-            this.Tab_UserPreset.Controls.Add(this.Checkbox_Blue);
-            this.Tab_UserPreset.Controls.Add(this.Checkbox_Green);
-            this.Tab_UserPreset.Controls.Add(this.Checkbox_Red);
-            this.Tab_UserPreset.HorizontalScrollbarBarColor = true;
-            this.Tab_UserPreset.Location = new System.Drawing.Point(4, 35);
-            this.Tab_UserPreset.Name = "Tab_UserPreset";
-            this.Tab_UserPreset.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.Tab_UserPreset.Size = new System.Drawing.Size(327, 203);
-            this.Tab_UserPreset.TabIndex = 0;
-            this.Tab_UserPreset.Text = "User Preset";
-            this.Tab_UserPreset.VerticalScrollbarBarColor = true;
-            // 
-            // Checkbox_Blue
-            // 
-            this.Checkbox_Blue.AutoSize = true;
-            this.Checkbox_Blue.Enabled = false;
-            this.Checkbox_Blue.Location = new System.Drawing.Point(19, 87);
-            this.Checkbox_Blue.Name = "Checkbox_Blue";
-            this.Checkbox_Blue.Size = new System.Drawing.Size(46, 15);
-            this.Checkbox_Blue.TabIndex = 4;
-            this.Checkbox_Blue.Text = "Blue";
-            this.Checkbox_Blue.UseVisualStyleBackColor = true;
-            this.Checkbox_Blue.CheckedChanged += new System.EventHandler(this.Checkbox_Blue_CheckedChanged);
-            // 
-            // Checkbox_Green
-            // 
-            this.Checkbox_Green.AutoSize = true;
-            this.Checkbox_Green.Enabled = false;
-            this.Checkbox_Green.Location = new System.Drawing.Point(19, 51);
-            this.Checkbox_Green.Name = "Checkbox_Green";
-            this.Checkbox_Green.Size = new System.Drawing.Size(54, 15);
-            this.Checkbox_Green.TabIndex = 3;
-            this.Checkbox_Green.Text = "Green";
-            this.Checkbox_Green.UseVisualStyleBackColor = true;
-            this.Checkbox_Green.CheckedChanged += new System.EventHandler(this.Checkbox_Green_CheckedChanged);
-            // 
-            // Checkbox_Red
-            // 
-            this.Checkbox_Red.AutoSize = true;
-            this.Checkbox_Red.Enabled = false;
-            this.Checkbox_Red.Location = new System.Drawing.Point(19, 17);
-            this.Checkbox_Red.Name = "Checkbox_Red";
-            this.Checkbox_Red.Size = new System.Drawing.Size(43, 15);
-            this.Checkbox_Red.TabIndex = 2;
-            this.Checkbox_Red.Text = "Red";
-            this.Checkbox_Red.UseVisualStyleBackColor = true;
-            this.Checkbox_Red.CheckedChanged += new System.EventHandler(this.Checkbox_Red_CheckedChanged);
-            // 
             // Tab_GamePreset
             // 
             this.Tab_GamePreset.Controls.Add(this.ListView_UserLog);
@@ -264,6 +214,56 @@
             this.Button_StartGamePreset.UseVisualStyleBackColor = true;
             this.Button_StartGamePreset.Click += new System.EventHandler(this.Button_StartGamePreset_Click);
             // 
+            // Tab_UserPreset
+            // 
+            this.Tab_UserPreset.Controls.Add(this.Checkbox_Blue);
+            this.Tab_UserPreset.Controls.Add(this.Checkbox_Green);
+            this.Tab_UserPreset.Controls.Add(this.Checkbox_Red);
+            this.Tab_UserPreset.HorizontalScrollbarBarColor = true;
+            this.Tab_UserPreset.Location = new System.Drawing.Point(4, 35);
+            this.Tab_UserPreset.Name = "Tab_UserPreset";
+            this.Tab_UserPreset.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.Tab_UserPreset.Size = new System.Drawing.Size(327, 203);
+            this.Tab_UserPreset.TabIndex = 0;
+            this.Tab_UserPreset.Text = "User Preset";
+            this.Tab_UserPreset.VerticalScrollbarBarColor = true;
+            // 
+            // Checkbox_Blue
+            // 
+            this.Checkbox_Blue.AutoSize = true;
+            this.Checkbox_Blue.Enabled = false;
+            this.Checkbox_Blue.Location = new System.Drawing.Point(19, 87);
+            this.Checkbox_Blue.Name = "Checkbox_Blue";
+            this.Checkbox_Blue.Size = new System.Drawing.Size(46, 15);
+            this.Checkbox_Blue.TabIndex = 4;
+            this.Checkbox_Blue.Text = "Blue";
+            this.Checkbox_Blue.UseVisualStyleBackColor = true;
+            this.Checkbox_Blue.CheckedChanged += new System.EventHandler(this.Checkbox_Blue_CheckedChanged);
+            // 
+            // Checkbox_Green
+            // 
+            this.Checkbox_Green.AutoSize = true;
+            this.Checkbox_Green.Enabled = false;
+            this.Checkbox_Green.Location = new System.Drawing.Point(19, 51);
+            this.Checkbox_Green.Name = "Checkbox_Green";
+            this.Checkbox_Green.Size = new System.Drawing.Size(54, 15);
+            this.Checkbox_Green.TabIndex = 3;
+            this.Checkbox_Green.Text = "Green";
+            this.Checkbox_Green.UseVisualStyleBackColor = true;
+            this.Checkbox_Green.CheckedChanged += new System.EventHandler(this.Checkbox_Green_CheckedChanged);
+            // 
+            // Checkbox_Red
+            // 
+            this.Checkbox_Red.AutoSize = true;
+            this.Checkbox_Red.Enabled = false;
+            this.Checkbox_Red.Location = new System.Drawing.Point(19, 17);
+            this.Checkbox_Red.Name = "Checkbox_Red";
+            this.Checkbox_Red.Size = new System.Drawing.Size(43, 15);
+            this.Checkbox_Red.TabIndex = 2;
+            this.Checkbox_Red.Text = "Red";
+            this.Checkbox_Red.UseVisualStyleBackColor = true;
+            this.Checkbox_Red.CheckedChanged += new System.EventHandler(this.Checkbox_Red_CheckedChanged);
+            // 
             // ComboBox_Ports
             // 
             this.ComboBox_Ports.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -317,9 +317,9 @@
             this.Tab_Home.ResumeLayout(false);
             this.Tile_PresetsGenerator.ResumeLayout(false);
             this.Tile_Settings.ResumeLayout(false);
+            this.Tab_GamePreset.ResumeLayout(false);
             this.Tab_UserPreset.ResumeLayout(false);
             this.Tab_UserPreset.PerformLayout();
-            this.Tab_GamePreset.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

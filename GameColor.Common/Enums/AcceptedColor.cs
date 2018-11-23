@@ -8,6 +8,7 @@
         Yellow = 3,
         Magenta = 4,
         LightBlue = 5,
-        White = 6
+        White = 6,
+        Black = 9
     }
 }

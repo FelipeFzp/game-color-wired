@@ -84,7 +84,7 @@ namespace GameColor.Core.Services
         public void StopApplicationWatcher()
         {
             _isStopped = true;
-            _communicationService.TurnOffLights();
+            _communicationService.TurnOffLightsAsync();
             _userLoggingService.LogLine("Stopping Application Watcher...");
         }
         public bool IsRunning()
@@ -150,7 +150,7 @@ namespace GameColor.Core.Services
             _lastHealthLevel = highestHealthLevel;
 
             _userLoggingService.LogLine($"Health: {highestHealthLevel}");
-            _communicationService.ChangeColor(highestHealthLevel);
+            _communicationService.ChangeColorAsync(highestHealthLevel);
         }
         private Screenshot TakeScreenshot()
         {

@@ -10,7 +10,7 @@
 #define COLOR_GREEN_BLUE '5'
 #define COLOR_RED_GREEN_BLUE '6'
 
-#define CLOSE_CHAR 'X'
+#define TURN_OFF_CHAR '9'
 
 void setup()
 {
@@ -31,35 +31,35 @@ void readSerial()
     {
         char screenResult = Serial.read();
 
-        if (screenResult != CLOSE_CHAR)
+        switch (screenResult)
         {
-            switch (screenResult)
-            {
-            case COLOR_RED:
-                setColor(1, 0, 0);
-                break;
-            case COLOR_GREEN:
-                setColor(0, 1, 0);
-                break;
-            case COLOR_BLUE:
-                setColor(0, 0, 1);
-                break;
-            case COLOR_RED_GREEN:
-                setColor(1, 1, 0);
-                break;
-            case COLOR_RED_BLUE:
-                setColor(1, 0, 1);
-                break;
-            case COLOR_GREEN_BLUE:
-                setColor(0, 1, 1);
-                break;
-            case COLOR_RED_GREEN_BLUE:
-                setColor(1, 1, 1);
-                break;
-            }
-        }
-        else
+        case COLOR_RED:
+            setColor(1, 0, 0);
+            break;
+        case COLOR_GREEN:
+            setColor(0, 1, 0);
+            break;
+        case COLOR_BLUE:
+            setColor(0, 0, 1);
+            break;
+        case COLOR_RED_GREEN:
+            setColor(1, 1, 0);
+            break;
+        case COLOR_RED_BLUE:
+            setColor(1, 0, 1);
+            break;
+        case COLOR_GREEN_BLUE:
+            setColor(0, 1, 1);
+            break;
+        case COLOR_RED_GREEN_BLUE:
+            setColor(1, 1, 1);
+            break;
+        case TURN_OFF_CHAR:
             setColor(0, 0, 0);
+            break;
+        }
+
+        Serial.println("OK");
     }
 }
 

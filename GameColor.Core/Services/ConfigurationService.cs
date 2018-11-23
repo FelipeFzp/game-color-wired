@@ -5,6 +5,8 @@ using GameColor.Core.Models;
 using Gma.System.MouseKeyHook;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
@@ -16,6 +18,7 @@ namespace GameColor.Core.Services
         private readonly string _tempPath;
         private readonly string _applicationExecutablePath;
 
+        private readonly IUserLoggingService _userLoggingService;
         private readonly IUserPresetService _userPresetService;
         private readonly IGamePresetService _gamePresetService;
         private readonly IKeyboardMouseEvents _hooks;
@@ -23,17 +26,19 @@ namespace GameColor.Core.Services
         #endregion
 
         #region Constructor
-        public ConfigurationService(string applicationExecutablePath, IUserPresetService userPresetService, IGamePresetService gamePresetService)
+        public ConfigurationService(string applicationExecutablePath, IUserPresetService userPresetService, IGamePresetService gamePresetService, IUserLoggingService userLoggingService)
         {
             _applicationExecutablePath = applicationExecutablePath;
 
             _userPresetService = userPresetService;
             _gamePresetService = gamePresetService;
+            _userLoggingService = userLoggingService;
 
             _tempPath = Path.GetTempPath();
 
             _hooks = Hook.GlobalEvents();
-            _hooks.KeyDown += GlobalHookKeyPress;
+
+            _hooks.KeyUp += GlobalHookKeyUp;
             _hooks.MouseDownExt += GlobalHookMouseDownExt;
         }
         #endregion
@@ -67,8 +72,6 @@ namespace GameColor.Core.Services
                     Registry.CurrentUser
                             .OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)
                             .SetValue(ConfigurationFile.REGISTER_APPLICATION_NAME, $"{_applicationExecutablePath} {MainArgs.IS_WIN_INITIALIZATION}");
-
-
                 }
                 else Registry.CurrentUser
                              .OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)
@@ -98,10 +101,12 @@ namespace GameColor.Core.Services
             return null;
         }
 
-        private void GlobalHookKeyPress(object sender, KeyEventArgs e)
+        private void GlobalHookKeyUp(object sender, KeyEventArgs e)
         {
             var config = GetCurrentConfiguration();
             var combination = e.Serialize();
+
+            _userLoggingService.LogLine(e.KeyCode.ToString());
 
             if (!_gamePresetService.IsRunning())
             {

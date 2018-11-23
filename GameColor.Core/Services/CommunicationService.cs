@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GameColor.Core.Services
@@ -16,6 +17,7 @@ namespace GameColor.Core.Services
         private readonly IUserLoggingService _userLoggingService;
 
         private SerialPort SerialPort;
+        private bool TaskInProgress;
         #endregion
 
         #region Constructor
@@ -32,37 +34,77 @@ namespace GameColor.Core.Services
         }
         public string GetBindedPort() =>
             SerialPort != null ? SerialPort.PortName : String.Empty;
-        public bool TestConnection()
+        public async Task<bool> TestConnectionAsync()
         {
-            try { SendData(' '); }
-            catch { return false; }
+            var hasConnection = await SendDataAsync(String.Empty);
+            if (hasConnection)
+                _userLoggingService.LogLine("Connection successfully established.");
 
-            return true;
+            return hasConnection;
         }
-        public void TurnOffLights() =>
-            SendData('X');
-        public void ChangeColor(AcceptedColor color) =>
-            SendData(((int)color).ToString().First());
+        public async Task TurnOffLightsAsync() =>
+            await SendDataAsync(((int)AcceptedColor.Black).ToString());
+        public async Task ChangeColorAsync(AcceptedColor color) =>
+            await SendDataAsync(((int)color).ToString());
         #endregion
 
         #region Private Methods
-        private void SendData(char data)
+        private async Task<bool> SendDataAsync(string data, bool log = true)
         {
-            if (SerialPort != null)
-            {
-                try
-                {
-                    if (!SerialPort.IsOpen)
-                        SerialPort.Open();
+            var response = String.Empty;
 
-                    SerialPort.WriteLine(data.ToString());
-                    SerialPort.Close();
-                }
-                catch
+            if (SerialPort == null)
+                return false;
+
+            await Task.Run(async () =>
+            {
+                await WaitForAvailableSerialAsync();
+                TaskInProgress = true;
+
+                try { response = await SerialWriteAsync(data); }
+                catch(Exception e)
                 {
-                    _userLoggingService.LogLine("Could not send command...");
+                    if (log)
+                        _userLoggingService.LogLine($"Error: {e.Message}");
                 }
-            }
+                finally
+                {
+                    if (log)
+                        _userLoggingService.LogLine(response);
+
+                    TaskInProgress = false;
+                }
+            });
+
+            return String.IsNullOrEmpty(response);
+        }
+        private async Task WaitForAvailableSerialAsync()
+        {
+            while (TaskInProgress)
+                await Task.Delay(40);
+        }
+        private void OpenSerial()
+        {
+            if (!SerialPort.IsOpen)
+                SerialPort.Open();
+        }
+
+        private void CloseSerial()
+        {
+            if (SerialPort.IsOpen)
+                SerialPort.Close();
+        }
+        private async Task<string> SerialWriteAsync(string data)
+        {
+            OpenSerial();
+
+            SerialPort.WriteLine(data);
+            await Task.Delay(50);
+            var response = SerialPort.ReadExisting();
+
+            CloseSerial();
+
+            return response;
         }
         #endregion
 

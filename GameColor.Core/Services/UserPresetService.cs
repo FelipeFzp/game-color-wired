@@ -14,6 +14,7 @@ namespace GameColor.Core.Services
         private Action<bool> _onBlueChange;
 
         private bool _isStopped;
+
         private bool _red;
         private bool _green;
         private bool _blue;
@@ -24,6 +25,10 @@ namespace GameColor.Core.Services
         }
 
         #region Public Methods
+        public bool Red() => _red;
+        public bool Green() => _green;
+        public bool Blue() => _blue;
+
         public void ToggleColor(bool red, bool green, bool blue)
         {
             _red = red;
@@ -43,7 +48,7 @@ namespace GameColor.Core.Services
         }
         public void StopUserPreset()
         {
-            _communicationService.TurnOffLights();
+            _communicationService.TurnOffLightsAsync();
             _isStopped = true;
         }
         public void ToggleRed()
@@ -102,9 +107,9 @@ namespace GameColor.Core.Services
                 else if (_green) acceptedColor = AcceptedColor.Green;
                 else if (_blue) acceptedColor = AcceptedColor.Blue;
 
-                _communicationService.ChangeColor(acceptedColor.Value);
+                _communicationService.ChangeColorAsync(acceptedColor.Value);
             }
-            else _communicationService.TurnOffLights();
+            else _communicationService.TurnOffLightsAsync();
 
         }
         #endregion

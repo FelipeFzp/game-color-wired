@@ -224,7 +224,7 @@ namespace GameColor.View.Views
             if (port != String.Empty)
             {
                 _communicationService.BindPort(port);
-                _communicationService.TestConnection();
+                _communicationService.TestConnectionAsync();
 
                 Label_PortErrorMessage.Visible = false;
                 Checkbox_Red.Enabled = true;
@@ -259,9 +259,9 @@ namespace GameColor.View.Views
         }
         private void HandlePortsComboBoxInitialization() =>
             ConfigureUserPreferences();
-        #endregion
 
         private void TabControl_Presets_KeyDown(object sender, KeyEventArgs e) =>
             e.Handled = true;
+        #endregion
     }
 }

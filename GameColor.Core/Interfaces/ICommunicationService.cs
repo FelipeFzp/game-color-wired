@@ -1,4 +1,5 @@
 ﻿using GameColor.Common.Enums;
+using System.Threading.Tasks;
 
 namespace GameColor.Core.Interfaces
 {
@@ -6,8 +7,8 @@ namespace GameColor.Core.Interfaces
     {
         void BindPort(string comPort, int writeTimeout = 2000, int readTimeout = 2000);
         string GetBindedPort();
-        bool TestConnection();
-        void TurnOffLights();
-        void ChangeColor(AcceptedColor color);
+        Task<bool> TestConnectionAsync();
+        Task TurnOffLightsAsync();
+        Task ChangeColorAsync(AcceptedColor color);
     }
 }
