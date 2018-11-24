@@ -242,6 +242,8 @@ namespace GameColor.View.Views
         }
         private void Tile_Settings_Click(object sender, EventArgs e) =>
             new SettingsDialog(_configurationService).ShowDialog();
+        private void Tile_Updater_Click(object sender, EventArgs e) =>
+            new UpdaterDialog().ShowDialog();
         private void HandlePortsComboBoxValueChanged()
         {
             var port = ComboBox_Ports.SelectedItem?.ToString();
