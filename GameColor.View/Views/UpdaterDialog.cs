@@ -23,7 +23,7 @@ namespace GameColor.View.Views
         private string _fullPath;
         private string _fileName;
         private string _folderPath;
-        
+
         public UpdaterDialog(ICommunicationService communicationService)
         {
             InitializeComponent();
@@ -54,7 +54,8 @@ namespace GameColor.View.Views
         {
             if (download.IsComplete)
             {
-                //TODO: send notification
+                //TODO: exibir toast notification quando uma exception for lançada ou quando o serviço de toast for chamado
+                //TODO: desfazer processo e deletar pastas criadas quando qualquer erro acontecer
 
                 _fullPath = download.FullPath;
                 _fileName = _fullPath.Split('\\')
@@ -111,14 +112,22 @@ namespace GameColor.View.Views
             File.Move($"{tempFolder.FullName}\\{manifest.UserFile}", $"{_folderPath}\\{manifest.UserFile}");
         }
 
-        private void UploadMicroControllerFirmware(DirectoryInfo tempFolder, UpdateManifest manifest) =>
-            new ArduinoSketchUploader(
-                new ArduinoSketchUploaderOptions()
-                {
-                    FileName = $"{tempFolder.FullName}\\{manifest.MicroControllerFile}",
-                    PortName = _communicationService.GetBindedPort(),
-                    ArduinoModel = ArduinoModel.UnoR3
-                }).UploadSketch();
+        private void UploadMicroControllerFirmware(DirectoryInfo tempFolder, UpdateManifest manifest)
+        {
+            var comPort = _communicationService.GetBindedPort();
+
+            //TOOD validar conexão com arduino antes de a dialog abrir e aqui caso a conexão não esteja estabelecida
+            if(!String.IsNullOrEmpty(comPort))
+            {
+                new ArduinoSketchUploader(
+                    new ArduinoSketchUploaderOptions()
+                    {
+                        FileName = $"{tempFolder.FullName}\\{manifest.MicroControllerFile}",
+                        PortName = comPort,
+                        ArduinoModel = ArduinoModel.UnoR3
+                    }).UploadSketch();
+            }
+        }
         #endregion
     }
 }
