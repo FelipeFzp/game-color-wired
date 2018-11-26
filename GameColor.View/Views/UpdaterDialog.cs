@@ -37,14 +37,17 @@ namespace GameColor.View.Views
             var settings = new CefSettings();
 
             if (!Cef.IsInitialized)
+            {
+                Cef.EnableHighDPISupport();
                 Cef.Initialize(settings);
+            }
 
             var browser = new ChromiumWebBrowser(DRIVE_FOLDER_URL);
             browser.Dock = DockStyle.Fill;
 
-            var downloadHandler = new DownloadHandler();
-            downloadHandler.OnDownloadUpdatedFired += DownloadHandler;
-            browser.DownloadHandler = downloadHandler;
+            //var downloadhandler = new downloadhandler();
+            //downloadhandler.ondownloadupdatedfired += downloadhandler;
+            //browser.downloadhandler = downloadhandler;
 
             Controls.Add(browser);
         }
