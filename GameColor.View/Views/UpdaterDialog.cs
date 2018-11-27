@@ -45,9 +45,9 @@ namespace GameColor.View.Views
             var browser = new ChromiumWebBrowser(DRIVE_FOLDER_URL);
             browser.Dock = DockStyle.Fill;
 
-            //var downloadhandler = new downloadhandler();
-            //downloadhandler.ondownloadupdatedfired += downloadhandler;
-            //browser.downloadhandler = downloadhandler;
+            var downloadHandler = new DownloadHandler();
+            downloadHandler.OnDownloadUpdatedFired += DownloadHandler;
+            browser.DownloadHandler = downloadHandler;
 
             Controls.Add(browser);
         }
@@ -55,11 +55,11 @@ namespace GameColor.View.Views
         #region Events
         private void DownloadHandler(object sender, DownloadItem download)
         {
+            //if (download.IsCancelled)
+            //TODO: avisar usuário que o download foi cancelado
+
             if (download.IsComplete)
             {
-                //TODO: exibir toast notification quando uma exception for lançada ou quando o serviço de toast for chamado
-                //TODO: desfazer processo e deletar pastas criadas quando qualquer erro acontecer
-
                 _fullPath = download.FullPath;
                 _fileName = _fullPath.Split('\\')
                                        .ToList()
@@ -67,19 +67,31 @@ namespace GameColor.View.Views
 
                 _folderPath = _fullPath.TrimEnd(_fileName.ToArray());
 
-                var tempFolder = CreateTemporaryFolder();
+                var tempFolder = default(DirectoryInfo);
 
-                ExtractAndDeleteZipToFolder(tempFolder);
+                try
+                {
+                    tempFolder = CreateTemporaryFolder();
 
-                var manifest = ReadManifestFile(tempFolder);
+                    ExtractZipToTempAndDelete(tempFolder);
 
-                MoveUserFileToSelectedPath(tempFolder, manifest);
+                    var manifest = ReadManifestFile(tempFolder);
 
-                UploadMicroControllerFirmware(tempFolder, manifest);
+                    MoveUserFileToSelectedPath(tempFolder, manifest);
 
-                tempFolder.Delete(true);
+                    UploadMicroControllerFirmware(tempFolder, manifest);
+                }
+                catch (Exception e)
+                {
+                    //TODO: lançar exceção e exibir mensagem amigavel para o usuario
+                }
+                finally
+                {
+                    if (tempFolder != null)
+                        tempFolder.Delete(true);
 
-                Invoke((MethodInvoker)delegate { Close(); });
+                    Invoke((MethodInvoker)delegate { Close(); });
+                }
             }
         }
         #endregion
@@ -87,13 +99,18 @@ namespace GameColor.View.Views
         #region Methods
         private DirectoryInfo CreateTemporaryFolder()
         {
-            var tempFolder = Directory.CreateDirectory($"{_folderPath}GameColorTemp");
+            var targetDirectory = $"{_folderPath}GameColorTemp";
+
+            if (Directory.Exists(targetDirectory))
+                Directory.Delete(targetDirectory);
+
+            var tempFolder = Directory.CreateDirectory(targetDirectory);
             tempFolder.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
 
             return tempFolder;
         }
 
-        private void ExtractAndDeleteZipToFolder(DirectoryInfo tempFolder)
+        private void ExtractZipToTempAndDelete(DirectoryInfo tempFolder)
         {
             new FastZip().ExtractZip(_fullPath, tempFolder.FullName, null);
             File.Delete(_fullPath);
@@ -119,17 +136,16 @@ namespace GameColor.View.Views
         {
             var comPort = _communicationService.GetBindedPort();
 
-            //TOOD validar conexão com arduino antes de a dialog abrir e aqui caso a conexão não esteja estabelecida
-            if(!String.IsNullOrEmpty(comPort))
-            {
-                new ArduinoSketchUploader(
-                    new ArduinoSketchUploaderOptions()
-                    {
-                        FileName = $"{tempFolder.FullName}\\{manifest.MicroControllerFile}",
-                        PortName = comPort,
-                        ArduinoModel = ArduinoModel.UnoR3
-                    }).UploadSketch();
-            }
+            //if (String.IsNullOrEmpty(comPort))
+            //TODO: lançar exceção amigavel e exibir para o usuário avisando que a conexão com a arduino nao foi estabelecida
+
+            new ArduinoSketchUploader(
+                new ArduinoSketchUploaderOptions()
+                {
+                    FileName = $"{tempFolder.FullName}\\{manifest.MicroControllerFile}",
+                    PortName = comPort,
+                    ArduinoModel = ArduinoModel.UnoR3 //Primeiras versões suporta apenas Arduino Uno
+                }).UploadSketch();
         }
         #endregion
     }
