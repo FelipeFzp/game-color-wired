@@ -5,8 +5,6 @@ using GameColor.Core.Models;
 using Gma.System.MouseKeyHook;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
@@ -105,8 +103,6 @@ namespace GameColor.Core.Services
         {
             var config = GetCurrentConfiguration();
             var combination = e.Serialize();
-
-            _userLoggingService.LogLine(e.KeyCode.ToString());
 
             if (!_gamePresetService.IsRunning())
             {

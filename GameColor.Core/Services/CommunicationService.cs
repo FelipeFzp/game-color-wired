@@ -49,7 +49,7 @@ namespace GameColor.Core.Services
         #endregion
 
         #region Private Methods
-        private async Task<bool> SendDataAsync(string data, bool log = true)
+        private async Task<bool> SendDataAsync(string data, bool log = false)
         {
             var response = String.Empty;
 

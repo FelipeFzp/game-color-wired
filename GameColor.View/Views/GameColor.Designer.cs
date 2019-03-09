@@ -70,7 +70,7 @@
             this.TabControl_Presets.Controls.Add(this.Tab_UserPreset);
             this.TabControl_Presets.Location = new System.Drawing.Point(0, 76);
             this.TabControl_Presets.Name = "TabControl_Presets";
-            this.TabControl_Presets.SelectedIndex = 0;
+            this.TabControl_Presets.SelectedIndex = 2;
             this.TabControl_Presets.Size = new System.Drawing.Size(335, 242);
             this.TabControl_Presets.TabIndex = 0;
             this.TabControl_Presets.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.TabControl_Presets_Selecting);
@@ -225,7 +225,7 @@
             this.ListView_UserLog.LabelWrap = false;
             this.ListView_UserLog.Location = new System.Drawing.Point(7, 47);
             this.ListView_UserLog.Name = "ListView_UserLog";
-            this.ListView_UserLog.Size = new System.Drawing.Size(0, 0);
+            this.ListView_UserLog.Size = new System.Drawing.Size(312, 153);
             this.ListView_UserLog.TabIndex = 5;
             this.ListView_UserLog.UseCompatibleStateImageBehavior = false;
             this.ListView_UserLog.View = System.Windows.Forms.View.Details;

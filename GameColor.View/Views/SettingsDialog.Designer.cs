@@ -92,9 +92,9 @@
             this.Label_StartWithWindows.FontWeight = MetroFramework.MetroLabelWeight.Regular;
             this.Label_StartWithWindows.Location = new System.Drawing.Point(14, 65);
             this.Label_StartWithWindows.Name = "Label_StartWithWindows";
-            this.Label_StartWithWindows.Size = new System.Drawing.Size(201, 19);
+            this.Label_StartWithWindows.Size = new System.Drawing.Size(111, 19);
             this.Label_StartWithWindows.TabIndex = 3;
-            this.Label_StartWithWindows.Text = "Start with windows initialization";
+            this.Label_StartWithWindows.Text = "Open on startup";
             // 
             // CheckBox_Red
             // 

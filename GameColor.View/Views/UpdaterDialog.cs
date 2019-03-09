@@ -49,7 +49,7 @@ namespace GameColor.View.Views
             downloadHandler.OnDownloadUpdatedFired += DownloadHandler;
             browser.DownloadHandler = downloadHandler;
 
-            Controls.Add(browser);
+            Panel_Browser.Controls.Add(browser);
         }
 
         #region Events
@@ -67,31 +67,37 @@ namespace GameColor.View.Views
 
                 _folderPath = _fullPath.TrimEnd(_fileName.ToArray());
 
-                var tempFolder = default(DirectoryInfo);
-
-                try
+                var selectedFolderFiles = Directory.GetFiles(_folderPath);
+                if (selectedFolderFiles.Any(name => name.Contains("GameColor.exe")))
                 {
-                    tempFolder = CreateTemporaryFolder();
 
-                    ExtractZipToTempAndDelete(tempFolder);
+                    var tempFolder = default(DirectoryInfo);
 
-                    var manifest = ReadManifestFile(tempFolder);
+                    try
+                    {
+                        tempFolder = CreateTemporaryFolder();
 
-                    MoveUserFileToSelectedPath(tempFolder, manifest);
+                        ExtractZipToTempAndDelete(tempFolder);
 
-                    UploadMicroControllerFirmware(tempFolder, manifest);
+                        var manifest = ReadManifestFile(tempFolder);
+
+                        MoveUserFileToSelectedPath(tempFolder, manifest);
+
+                        UploadMicroControllerFirmware(tempFolder, manifest);
+                    }
+                    catch (Exception e)
+                    {
+                        //TODO: lançar exceção e exibir mensagem amigavel para o usuario
+                    }
+                    finally
+                    {
+                        if (tempFolder != null)
+                            tempFolder.Delete(true);
+
+                        Invoke((MethodInvoker)delegate { Close(); });
+                    }
                 }
-                catch (Exception e)
-                {
-                    //TODO: lançar exceção e exibir mensagem amigavel para o usuario
-                }
-                finally
-                {
-                    if (tempFolder != null)
-                        tempFolder.Delete(true);
-
-                    Invoke((MethodInvoker)delegate { Close(); });
-                }
+                else throw new Exception("Invalid Folder");
             }
         }
         #endregion
