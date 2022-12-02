@@ -1,5 +1,4 @@
 ﻿using ColorMine.ColorSpaces;
-using GameColor.Core.Enums;
 using GameColor.Core.DllImports;
 using GameColor.Core.Helpers;
 using GameColor.Core.Interfaces;
@@ -39,12 +38,12 @@ namespace GameColor.Core.Services
         public void SetPreset(string name)
         {
             //TODO: buscar presets configurados pelo usuário
-            _userProcess = new WatchedProcess("FortniteClient-Win64-Shipping", 672, 829, 265, 15,
-                                  new ColorExpression(100, Color.FromArgb(140, 90, 200), 4, 20, EvaluationStrategy.KeepLast),
-                                  new ColorExpression(100, Color.FromArgb(49, 115, 124), 4, 20, EvaluationStrategy.KeepLast),
-                                  new ColorExpression(200, Color.FromArgb(99, 202, 70), Color.FromArgb(0, 255, 0), 3, 20, EvaluationStrategy.Normal),
-                                  new ColorExpression(100, Color.FromArgb(99, 202, 70), Color.FromArgb(0, 255, 255), 2, 20, EvaluationStrategy.Normal),
-                                  new ColorExpression(70, Color.FromArgb(99, 202, 70), Color.FromArgb(255, 0, 0), 1, 20, EvaluationStrategy.Normal));
+            _userProcess = new WatchedProcess(
+                "FortniteClient-Win64-Shipping", 0, 0, 2560, 1440,
+                new ColorExpression(x: 300, y: 1275, targetColor: Color.FromArgb(0, 171, 234), resultColor: Color.FromArgb(0, 255, 0), tolerance: 20 ),
+                new ColorExpression(x: 430, y: 1300, targetColor: Color.FromArgb(63, 213, 48), resultColor: Color.FromArgb(255, 255, 0), tolerance: 20),
+                new ColorExpression(x: 250, y: 1300, targetColor: Color.FromArgb(63, 213, 48), resultColor: Color.FromArgb(255, 0, 0), tolerance: 20)
+                );
         }
         public void StartApplicationWatcher()
         {
@@ -76,7 +75,7 @@ namespace GameColor.Core.Services
 
                     Thread.Sleep(1000);
                 }
-            }); 
+            });
 
             if (!_isStopped)
                 thread.Start();
@@ -84,7 +83,7 @@ namespace GameColor.Core.Services
         public void StopApplicationWatcher()
         {
             _isStopped = true;
-            _communicationService.ChangeColor(new byte[] {0,0,0});
+            _communicationService.ChangeColor(new byte[] { 0, 0, 0 });
             _userLoggingService.LogLine("Stopping Application Watcher...");
         }
         public bool IsRunning()
@@ -92,7 +91,7 @@ namespace GameColor.Core.Services
         #endregion
 
         #region Private Methods
-        
+
         private Process GetCurrentWindowsProcess()
         {
             Process proc;
@@ -120,33 +119,29 @@ namespace GameColor.Core.Services
         private void EvaluateColorExpressions(Screenshot screenshot)
         {
             var highestHealthLevel = _userProcess.Expression
-                                        .OrderBy(p => p.Priority)
-                                        .First()
+                                        .Last()
                                         .ResultColor;
 
             _userProcess.Expression
-                    .OrderBy(p => p.Priority)
+                    .Reverse()
                     .ToList()
                     .ForEach(e =>
                     {
-                        var pixel = screenshot.Bitmap.GetPixel(e.PixelIndex, 0);
-
-                        var expectedLab = ColorHelper.CreateLabFromRgb(e.TargetColor.R, e.TargetColor.G, e.TargetColor.B);
+                        var pixel = screenshot.Bitmap.GetPixel(e.X, e.Y);
                         var currentLab = ColorHelper.CreateLabFromRgb(pixel.R, pixel.G, pixel.B);
+                        var expectedLab = ColorHelper.CreateLabFromRgb(e.TargetColor.R, e.TargetColor.G, e.TargetColor.B);
 
                         var diference = CompareLabColors(expectedLab, currentLab);
 
                         if (diference > -e.Tolerance && diference < e.Tolerance)
-                        {
-                            if (e.Strategy == EvaluationStrategy.KeepLast)
-                                highestHealthLevel = _lastHealthLevel;
-                            else
-                                highestHealthLevel = e.ResultColor;
-                        }
+                            highestHealthLevel = e.ResultColor;
+
                         #region Debug
-                        //screenshot.Bitmap.MarkPixel(e.PixelIndex, 0, e.Status);
+                        screenshot.Bitmap.MarkPixel(e.X, e.Y, e.ResultColor);
                         #endregion
                     });
+
+            screenshot.Bitmap.Save($"{Directory.GetCurrentDirectory()}\\SCREEN.png", ImageFormat.Png);
 
             _lastHealthLevel = highestHealthLevel;
 
@@ -169,8 +164,8 @@ namespace GameColor.Core.Services
         private double CompareLabColors(Lab currentLab, Lab expectedLab)
         {
             return Math.Sqrt(
-                Math.Pow(expectedLab.L - currentLab.L, 2) + 
-                Math.Pow(expectedLab.A - currentLab.A, 2) + 
+                Math.Pow(expectedLab.L - currentLab.L, 2) +
+                Math.Pow(expectedLab.A - currentLab.A, 2) +
                 Math.Pow(expectedLab.B - currentLab.B, 2));
         }
         #endregion

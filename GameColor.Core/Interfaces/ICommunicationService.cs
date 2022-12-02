@@ -1,5 +1,4 @@
-﻿using GameColor.Core.Enums;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace GameColor.Core.Interfaces
 {

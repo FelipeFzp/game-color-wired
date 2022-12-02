@@ -68,7 +68,6 @@
     <Compile Include="Constants\MainArgs.cs" />
     <Compile Include="DllImports\Kernel32.cs" />
     <Compile Include="DllImports\User32.cs" />
-    <Compile Include="Enums\EvaluationStrategy.cs" />
     <Compile Include="Helpers\Bitmap.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Helpers\KeyCombination.cs" />
@@ -94,6 +93,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

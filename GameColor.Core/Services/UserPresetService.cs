@@ -1,5 +1,4 @@
-﻿using GameColor.Core.Enums;
-using GameColor.Core.Interfaces;
+﻿using GameColor.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading;
