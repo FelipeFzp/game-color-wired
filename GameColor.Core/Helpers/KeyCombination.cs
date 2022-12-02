@@ -5,11 +5,11 @@ namespace GameColor.Core.Helpers
 {
     public static class KeyCombination
     {
-        public const string PRESS_KEY_COMBINATION_LABEL = "Press key combination";
+        public const string PRESS_KEY_COMBINATION_LABEL = "Press key or combination";
         
-        public static string Serialize(this KeyEventArgs source, string escapeMessage = PRESS_KEY_COMBINATION_LABEL)
+        public static string SerializeToString(this KeyEventArgs source, string escapeMessage = PRESS_KEY_COMBINATION_LABEL)
         {
-            var combination = String.Empty;
+            var combination = string.Empty;
 
             if (source.KeyCode == Keys.Escape)
                 return escapeMessage;

@@ -8,17 +8,17 @@ namespace GameColor.Core.Interfaces
 {
     public interface IUserPresetService
     {
-        bool Red();
-        bool Green();
-        bool Blue();
-        void ToggleRed();
-        void ToggleGreen();
-        void ToggleBlue();
-        void OnRedChange(Action<bool> onRedChange);
-        void OnGreenChange(Action<bool> onGreenChange);
-        void OnBlueChange(Action<bool> onBoolChange);
+        byte Red();
+        byte Green();
+        byte Blue();
+        void SetRed(int value, bool mathOperation = false);
+        void SetGreen(int value, bool mathOperation = false);
+        void SetBlue(int value, bool mathOperation = false);
+        void OnRedChange(Action<byte> onRedChange);
+        void OnGreenChange(Action<byte> onGreenChange);
+        void OnBlueChange(Action<byte> onBoolChange);
         bool IsRunning();
         void StopUserPreset();
-        void ToggleColor(bool red, bool green, bool blue);
+        void SetColor(byte red, byte green, byte blue);
     }
 }

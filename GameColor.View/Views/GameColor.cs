@@ -3,6 +3,7 @@ using GameColor.Core.Services;
 using MetroFramework;
 using MetroFramework.Forms;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -45,26 +46,30 @@ namespace GameColor.View.Views
         #region Methods
         private void LoadConfiguration() =>
             _configurationService.SetDefaultConfiguration();
+
         private void ChangeMetroStyle()
         {
-            var red = Checkbox_Red.Checked;
-            var green = Checkbox_Green.Checked;
-            var blue = Checkbox_Blue.Checked;
+            var red = Convert.ToInt32(TrackBar_Red.Value > 0);
+            var green = Convert.ToInt32(TrackBar_Green.Value > 0);
+            var blue = Convert.ToInt32(TrackBar_Blue.Value > 0);
+            var combination = $"{red}{green}{blue}";
 
-            if (red || green || blue)
+            Style = new Dictionary<string, MetroColorStyle>
             {
-                if (red && green && blue) Style = MetroColorStyle.White;
-                else if (red && green && !blue) Style = MetroColorStyle.Yellow;
-                else if (red && !green && blue) Style = MetroColorStyle.Magenta;
-                else if (!red && green && blue) Style = MetroColorStyle.Blue;
-                else if (red) Style = MetroColorStyle.Red;
-                else if (green) Style = MetroColorStyle.Green;
-                else if (blue) Style = MetroColorStyle.Blue;
-            }
-            else Style = MetroColorStyle.Default;
+                { "111", MetroColorStyle.White },
+                { "110", MetroColorStyle.Yellow },
+                { "101", MetroColorStyle.Purple },
+                { "011", MetroColorStyle.Teal },
+                { "100", MetroColorStyle.Red },
+                { "010", MetroColorStyle.Green },
+                { "001", MetroColorStyle.Blue },
+                { "000", MetroColorStyle.Default }
+            }[combination];
         }
+
         private void ResetMetroStyle() =>
             Style = MetroColorStyle.Default;
+
         private void LoadDefaultControlsData()
         {
             TabControl_Presets.SelectedTab = Tab_Home;
@@ -75,6 +80,7 @@ namespace GameColor.View.Views
             if (availablePorts.Count > 1)
                 ComboBox_Ports.SelectedIndex = 0;
         }
+
         private void ConfigureViewEvents()
         {
             #region Logs
@@ -95,31 +101,32 @@ namespace GameColor.View.Views
             #endregion
 
             #region Colors Checkboxes
-            _userPresetService.OnRedChange((bool red) =>
+            _userPresetService.OnRedChange((byte red) =>
             {
-                Checkbox_Red.CheckedChanged -= Checkbox_Red_CheckedChanged;
-                Checkbox_Red.Checked = red;
-                Checkbox_Red.CheckedChanged += Checkbox_Red_CheckedChanged;
+                TrackBar_Red.ValueChanged -= TrackBar_Red_ValueChanged;
+                TrackBar_Red.Value = red;
+                TrackBar_Red.ValueChanged += TrackBar_Red_ValueChanged;
                 ChangeMetroStyle();
             });
 
-            _userPresetService.OnGreenChange((bool green) =>
+            _userPresetService.OnGreenChange((byte green) =>
             {
-                Checkbox_Green.CheckedChanged -= Checkbox_Green_CheckedChanged;
-                Checkbox_Green.Checked = green;
-                Checkbox_Green.CheckedChanged += Checkbox_Green_CheckedChanged;
+                TrackBar_Green.ValueChanged -= TrackBar_Green_ValueChanged;
+                TrackBar_Green.Value = green;
+                TrackBar_Green.ValueChanged += TrackBar_Green_ValueChanged;
                 ChangeMetroStyle();
             });
 
-            _userPresetService.OnBlueChange((bool blue) =>
+            _userPresetService.OnBlueChange((byte blue) =>
             {
-                Checkbox_Blue.CheckedChanged -= Checkbox_Blue_CheckedChanged;
-                Checkbox_Blue.Checked = blue;
-                Checkbox_Blue.CheckedChanged += Checkbox_Blue_CheckedChanged;
+                TrackBar_Blue.ValueChanged -= TrackBar_Blue_ValueChanged;
+                TrackBar_Blue.Value = blue;
+                TrackBar_Blue.ValueChanged += TrackBar_Blue_ValueChanged;
                 ChangeMetroStyle();
             });
             #endregion
         }
+
         private void ConfigureUserPreferences()
         {
             var currentConfiguration = _configurationService.GetCurrentConfiguration();
@@ -129,41 +136,44 @@ namespace GameColor.View.Views
                 //This delay wait for system COMS driver initialization
                 if (_initializateBySystem) await Task.Delay(2000);
 
-                Checkbox_Red.Invoke((MethodInvoker)delegate
+                TrackBar_Red.Invoke((MethodInvoker)delegate
                 {
                     if (currentConfiguration.TurnOnWhenOpen.Red)
-                        Checkbox_Red.Checked = currentConfiguration.TurnOnWhenOpen.Red;
+                        TrackBar_Red.Value = currentConfiguration.TurnOnWhenOpen.Red ? 255 : 0;
                 });
-                Checkbox_Green.Invoke((MethodInvoker)delegate
+                TrackBar_Green.Invoke((MethodInvoker)delegate
                 {
                     if (currentConfiguration.TurnOnWhenOpen.Green)
-                        Checkbox_Green.Checked = currentConfiguration.TurnOnWhenOpen.Green;
+                        TrackBar_Green.Value = currentConfiguration.TurnOnWhenOpen.Green ? 255 : 0;
                 });
-                Checkbox_Blue.Invoke((MethodInvoker)delegate
+                TrackBar_Blue.Invoke((MethodInvoker)delegate
                 {
                     if (currentConfiguration.TurnOnWhenOpen.Blue)
-                        Checkbox_Blue.Checked = currentConfiguration.TurnOnWhenOpen.Blue;
+                        TrackBar_Blue.Value = currentConfiguration.TurnOnWhenOpen.Blue ? 255 : 0;
                 });
             });
         }
         #endregion
 
         #region Events
-        private void Checkbox_Red_CheckedChanged(object sender, EventArgs e)
+        private void TrackBar_Red_ValueChanged(object sender, EventArgs e)
         {
-            _userPresetService.ToggleRed();
+            _userPresetService.SetRed(Convert.ToByte(TrackBar_Red.Value));
             ChangeMetroStyle();
         }
-        private void Checkbox_Green_CheckedChanged(object sender, EventArgs e)
+
+        private void TrackBar_Green_ValueChanged(object sender, EventArgs e)
         {
-            _userPresetService.ToggleGreen();
+            _userPresetService.SetGreen(Convert.ToByte(TrackBar_Green.Value));
             ChangeMetroStyle();
         }
-        private void Checkbox_Blue_CheckedChanged(object sender, EventArgs e)
+
+        private void TrackBar_Blue_ValueChanged(object sender, EventArgs e)
         {
-            _userPresetService.ToggleBlue();
+            _userPresetService.SetBlue(Convert.ToByte(TrackBar_Blue.Value));
             ChangeMetroStyle();
         }
+
         private void GameColor_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_gamePresetService.IsRunning())
@@ -175,9 +185,10 @@ namespace GameColor.View.Views
             _userLoggingService.StopLogging();
             _configurationService.DisposeConfigurations();
         }
+
         private void Button_StartGamePreset_Click(object sender, EventArgs e)
         {
-            if (ComboBox_GamePreset.SelectedItem != null && ComboBox_GamePreset.SelectedItem.ToString() != String.Empty)
+            if (ComboBox_GamePreset.SelectedItem != null && ComboBox_GamePreset.SelectedItem.ToString() != string.Empty)
             {
                 if (_userPresetService.IsRunning())
                     _userPresetService.StopUserPreset();
@@ -196,6 +207,7 @@ namespace GameColor.View.Views
                 }
             }
         }
+
         private void TabControl_Presets_Selecting(object sender, TabControlCancelEventArgs e)
         {
             if (TabControl_Presets.SelectedTab.Name == Tab_UserPreset.Name)
@@ -205,11 +217,11 @@ namespace GameColor.View.Views
                     _gamePresetService.StopApplicationWatcher();
                     Button_StartGamePreset.Text = "Start";
                 }
-
-                _userPresetService.ToggleColor(Checkbox_Red.Checked, Checkbox_Green.Checked, Checkbox_Blue.Checked);
+                _userPresetService.SetColor(Convert.ToByte(TrackBar_Red.Value), Convert.ToByte(TrackBar_Green.Value), Convert.ToByte(TrackBar_Blue.Value));
                 ChangeMetroStyle();
             }
         }
+
         private void ComboBox_Ports_Click(object sender, EventArgs e)
         {
             var availablePorts = CommunicationService.GetAvailableCom();
@@ -218,18 +230,19 @@ namespace GameColor.View.Views
             if (availablePorts.Count > 1)
                 ComboBox_Ports.SelectedIndex = 0;
         }
+
         private void ComboBox_Ports_SelectedValueChanged(object sender, EventArgs e)
         {
             var port = ComboBox_Ports.SelectedItem?.ToString();
-            if (port != String.Empty)
+            if (port != string.Empty)
             {
                 _communicationService.BindPort(port);
                 _communicationService.TestConnectionAsync();
 
                 Label_PortErrorMessage.Visible = false;
-                Checkbox_Red.Enabled = true;
-                Checkbox_Green.Enabled = true;
-                Checkbox_Blue.Enabled = true;
+                TrackBar_Red.Enabled = true;
+                TrackBar_Green.Enabled = true;
+                TrackBar_Blue.Enabled = true;
                 Button_StartGamePreset.Enabled = true;
 
                 if (ComboBox_Ports.Visible)
@@ -240,8 +253,10 @@ namespace GameColor.View.Views
             else
                 Label_PortErrorMessage.Visible = true;
         }
+
         private void Tile_Settings_Click(object sender, EventArgs e) =>
             new SettingsDialog(_configurationService).ShowDialog();
+
         private void HandlePortsComboBoxValueChanged()
         {
             var port = ComboBox_Ports.SelectedItem?.ToString();
@@ -257,6 +272,7 @@ namespace GameColor.View.Views
 
             }
         }
+
         private void HandlePortsComboBoxInitialization() =>
             ConfigureUserPreferences();
 

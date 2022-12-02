@@ -2,8 +2,10 @@
 using GameColor.Core.Helpers;
 using GameColor.Core.Interfaces;
 using GameColor.Core.Models;
+using MetroFramework.Controls;
 using MetroFramework.Forms;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace GameColor.View.Views
@@ -25,27 +27,39 @@ namespace GameColor.View.Views
         private void LoadDefaultData()
         {
             Toggle_InitializeWithWindows.CheckedChanged -= Toggle_InitializeWithWindows_CheckedChanged;
-            CheckBox_Red.CheckedChanged -= CheckBox_Red_CheckedChanged;
-            CheckBox_Green.CheckedChanged -= CheckBox_Green_CheckedChanged;
-            CheckBox_Blue.CheckedChanged -= CheckBox_Blue_CheckedChanged;
-
             Toggle_InitializeWithWindows.Checked = (bool)_configuration.StartWithWindows?.Enabled;
-            CheckBox_Red.Checked = (bool)_configuration.TurnOnWhenOpen?.Red;
-            CheckBox_Green.Checked = (bool)_configuration.TurnOnWhenOpen?.Green;
-            CheckBox_Blue.Checked = (bool)_configuration.TurnOnWhenOpen?.Blue;
-
-            CheckBox_Red.CheckedChanged += CheckBox_Red_CheckedChanged;
-            CheckBox_Green.CheckedChanged += CheckBox_Green_CheckedChanged;
-            CheckBox_Blue.CheckedChanged += CheckBox_Blue_CheckedChanged;
             Toggle_InitializeWithWindows.CheckedChanged += Toggle_InitializeWithWindows_CheckedChanged;
 
-            if (!String.IsNullOrEmpty(_configuration.Shortcuts.TurnOnRed))
-                TextBox_ShortcutRed.Text = _configuration.Shortcuts.TurnOnRed;
-            if (!String.IsNullOrEmpty(_configuration.Shortcuts.TurnOnGreen))
-                TextBox_ShortcutGreen.Text = _configuration.Shortcuts.TurnOnGreen;
-            if (!String.IsNullOrEmpty(_configuration.Shortcuts.TurnOnBlue))
-                TextBox_ShortcutBlue.Text = _configuration.Shortcuts.TurnOnBlue;
-            if (!String.IsNullOrEmpty(_configuration.Shortcuts.TurnOff))
+            CheckBox_Red.CheckedChanged -= CheckBox_Red_CheckedChanged;
+            CheckBox_Red.Checked = (bool)_configuration.TurnOnWhenOpen?.Red;
+            CheckBox_Red.CheckedChanged += CheckBox_Red_CheckedChanged;
+
+            CheckBox_Green.CheckedChanged -= CheckBox_Green_CheckedChanged;
+            CheckBox_Green.Checked = (bool)_configuration.TurnOnWhenOpen?.Green;
+            CheckBox_Green.CheckedChanged += CheckBox_Green_CheckedChanged;
+
+            CheckBox_Blue.CheckedChanged -= CheckBox_Blue_CheckedChanged;
+            CheckBox_Blue.Checked = (bool)_configuration.TurnOnWhenOpen?.Blue;
+            CheckBox_Blue.CheckedChanged += CheckBox_Blue_CheckedChanged;
+
+
+            if (!string.IsNullOrEmpty(_configuration.Shortcuts.IncrementRed))
+                TextBox_ShortcutRedInc.Text = _configuration.Shortcuts.IncrementRed;
+            if (!string.IsNullOrEmpty(_configuration.Shortcuts.DecrementRed))
+                TextBox_ShortcutRedDec.Text = _configuration.Shortcuts.DecrementRed;
+            
+            if (!string.IsNullOrEmpty(_configuration.Shortcuts.IncrementGreen))
+                TextBox_ShortcutGreenInc.Text = _configuration.Shortcuts.IncrementGreen;
+            if (!string.IsNullOrEmpty(_configuration.Shortcuts.DecrementGreen))
+                TextBox_ShortcutGreenDec.Text = _configuration.Shortcuts.DecrementGreen;
+            
+            
+            if (!string.IsNullOrEmpty(_configuration.Shortcuts.IncrementBlue))
+                TextBox_ShortcutBlueInc.Text = _configuration.Shortcuts.IncrementBlue;
+            if (!string.IsNullOrEmpty(_configuration.Shortcuts.DecrementBlue))
+                TextBox_ShortcutBlueDec.Text = _configuration.Shortcuts.DecrementBlue;
+
+            if (!string.IsNullOrEmpty(_configuration.Shortcuts.TurnOff))
                 TextBox_ShortcutTurnOff.Text = _configuration.Shortcuts.TurnOff;
         }
 
@@ -73,75 +87,40 @@ namespace GameColor.View.Views
         private void CheckBox_Blue_CheckedChanged(object sender, EventArgs e) =>
             _configuration.TurnOnWhenOpen.Blue = CheckBox_Blue.Checked;
 
-        private void TextBox_ShortcutRed_KeyDown(object sender, KeyEventArgs e)
+        private void TextBox_Shortcut_KeyDown(object sender, KeyEventArgs e)
         {
-            var shortCut = GetShortcutKeyCombinationDescription(e);
+            var textBox = sender as MetroTextBox;
+            var shortCutDescription = GetShortcutKeyCombinationDescription(e);
 
-            TextBox_ShortcutRed.Text = shortCut;
-            if (shortCut != KeyCombination.PRESS_KEY_COMBINATION_LABEL)
-                _configuration.Shortcuts.TurnOnRed = shortCut;
-            else _configuration.Shortcuts.TurnOnRed = null;
-        }
+            textBox.Text = shortCutDescription;
 
-        private void TextBox_ShortcutGreen_KeyDown(object sender, KeyEventArgs e)
-        {
-            var shortCut = GetShortcutKeyCombinationDescription(e);
+            var shortcutMapByTextboxName = new Dictionary<string, Action<string>>()
+            {
+                //RED
+                { TextBox_ShortcutRedInc.Name, (shortcut) => _configuration.Shortcuts.IncrementRed = shortcut != KeyCombination.PRESS_KEY_COMBINATION_LABEL ? shortcut : null },
+                { TextBox_ShortcutRedDec.Name, (shortcut) => _configuration.Shortcuts.DecrementRed = shortcut != KeyCombination.PRESS_KEY_COMBINATION_LABEL ? shortcut : null },
 
-            TextBox_ShortcutGreen.Text = shortCut;
-            if (shortCut != KeyCombination.PRESS_KEY_COMBINATION_LABEL)
-                _configuration.Shortcuts.TurnOnGreen = shortCut;
-            else _configuration.Shortcuts.TurnOnGreen = null;
-        }
+                //GREEN
+                { TextBox_ShortcutGreenInc.Name, (shortcut) => _configuration.Shortcuts.IncrementGreen = shortcut != KeyCombination.PRESS_KEY_COMBINATION_LABEL ? shortcut : null },
+                { TextBox_ShortcutGreenDec.Name, (shortcut) => _configuration.Shortcuts.DecrementGreen = shortcut != KeyCombination.PRESS_KEY_COMBINATION_LABEL ? shortcut : null },
 
-        private void TextBox_ShortcutBlue_KeyDown(object sender, KeyEventArgs e)
-        {
-            var shortCut = GetShortcutKeyCombinationDescription(e);
+                //BLUE
+                { TextBox_ShortcutBlueInc.Name, (shortcut) => _configuration.Shortcuts.IncrementBlue = shortcut != KeyCombination.PRESS_KEY_COMBINATION_LABEL ? shortcut : null },
+                { TextBox_ShortcutBlueDec.Name, (shortcut) => _configuration.Shortcuts.DecrementBlue = shortcut != KeyCombination.PRESS_KEY_COMBINATION_LABEL ? shortcut : null },
 
-            TextBox_ShortcutBlue.Text = shortCut;
-            if (shortCut != KeyCombination.PRESS_KEY_COMBINATION_LABEL)
-                _configuration.Shortcuts.TurnOnBlue = shortCut;
-            else _configuration.Shortcuts.TurnOnBlue = null;
-        }
+                //OFF
+                { TextBox_ShortcutTurnOff.Name, (shortcut) => _configuration.Shortcuts.TurnOff = shortcut != KeyCombination.PRESS_KEY_COMBINATION_LABEL ? shortcut : null }
+            };
 
-        private void TextBox_ShortcutTurnOff_KeyDown(object sender, KeyEventArgs e)
-        {
-            var shortCut = GetShortcutKeyCombinationDescription(e);
-
-            TextBox_ShortcutTurnOff.Text = shortCut;
-            if (shortCut != KeyCombination.PRESS_KEY_COMBINATION_LABEL)
-                _configuration.Shortcuts.TurnOff = shortCut;
-            else _configuration.Shortcuts.TurnOff = null;
-        }
-
-        private void TextBox_ShortcutRed_Click(object sender, EventArgs e)
-        {
-            _configuration.Shortcuts.TurnOnRed = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
-            TextBox_ShortcutRed.Text = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
-        }
-
-        private void TextBox_ShortcutGreen_Click(object sender, EventArgs e)
-        {
-            _configuration.Shortcuts.TurnOnGreen = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
-            TextBox_ShortcutGreen.Text = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
-        }
-
-        private void TextBox_ShortcutBlue_Click(object sender, EventArgs e)
-        {
-            _configuration.Shortcuts.TurnOnBlue = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
-            TextBox_ShortcutBlue.Text = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
-        }
-
-        private void TextBox_ShortcutTurnOff_Click(object sender, EventArgs e)
-        {
-            _configuration.Shortcuts.TurnOff = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
-            TextBox_ShortcutTurnOff.Text = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
+            shortcutMapByTextboxName.TryGetValue(textBox.Name, out var setShortcut);
+            setShortcut?.Invoke(shortCutDescription);
         }
         #endregion
 
         #region Methods
         private string GetShortcutKeyCombinationDescription(KeyEventArgs e)
         {
-            var combination = e.Serialize(KeyCombination.PRESS_KEY_COMBINATION_LABEL);
+            var combination = e.SerializeToString();
 
             return combination;
         }

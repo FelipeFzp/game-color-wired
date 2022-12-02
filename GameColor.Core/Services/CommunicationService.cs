@@ -1,10 +1,10 @@
-﻿using GameColor.Core.Enums;
-using GameColor.Core.Interfaces;
+﻿using GameColor.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
-using System.Threading;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace GameColor.Core.Services
@@ -17,12 +17,17 @@ namespace GameColor.Core.Services
         private readonly IUserLoggingService _userLoggingService;
 
         private SerialPort SerialPort;
-        private bool TaskInProgress;
+        private Subject<string> DataSendSubject = new Subject<string>();
         #endregion
 
         #region Constructor
-        public CommunicationService(IUserLoggingService userLoggingService) =>
+        public CommunicationService(IUserLoggingService userLoggingService)
+        {
             _userLoggingService = userLoggingService;
+            DataSendSubject
+                .Throttle(TimeSpan.FromMilliseconds(200))
+                .Subscribe(async e => await SendDataAsync(e));
+        }
         #endregion
 
         #region Public Methods
@@ -32,57 +37,60 @@ namespace GameColor.Core.Services
             SerialPort.WriteTimeout = writeTimeout;
             SerialPort.ReadTimeout = readTimeout;
         }
+
         public string GetBindedPort() =>
-            SerialPort != null ? SerialPort.PortName : String.Empty;
+            SerialPort != null ? SerialPort.PortName : string.Empty;
+
         public async Task<bool> TestConnectionAsync()
         {
-            var hasConnection = await SendDataAsync(String.Empty);
+            var hasConnection = await SendDataAsync(string.Empty);
             if (hasConnection)
                 _userLoggingService.LogLine("Connection successfully established.");
 
             return hasConnection;
         }
-        public async Task TurnOffLightsAsync() =>
-            await SendDataAsync(((int)AcceptedColor.Black).ToString());
-        public async Task ChangeColorAsync(AcceptedColor color) =>
-            await SendDataAsync(((int)color).ToString());
+
+        public void ChangeColor(byte[] rgb) =>
+            DataSendSubject.OnNext($"rgb({string.Join(",", rgb)})");
         #endregion
 
         #region Private Methods
         private async Task<bool> SendDataAsync(string data, bool log = true)
         {
-            var response = String.Empty;
+            var response = string.Empty;
 
             if (SerialPort == null)
                 return false;
 
             await Task.Run(async () =>
             {
-                await WaitForAvailableSerialAsync();
-                TaskInProgress = true;
+                try
+                {
+                    Console.WriteLine(data);
+                    OpenSerial();
 
-                try { response = await SerialWriteAsync(data); }
-                catch(Exception e)
+                    SerialPort.WriteLine(data);
+                    await Task.Delay(50);
+                    response = SerialPort.ReadExisting();
+
+                    CloseSerial();
+                }
+                catch (Exception e)
                 {
                     if (log)
                         _userLoggingService.LogLine($"Error: {e.Message}");
                 }
                 finally
                 {
-                    if (log)
+                    if (log && !string.IsNullOrEmpty(response))
                         _userLoggingService.LogLine(response);
 
-                    TaskInProgress = false;
                 }
             });
 
-            return String.IsNullOrEmpty(response);
+            return string.IsNullOrEmpty(response);
         }
-        private async Task WaitForAvailableSerialAsync()
-        {
-            while (TaskInProgress)
-                await Task.Delay(40);
-        }
+
         private void OpenSerial()
         {
             if (!SerialPort.IsOpen)
@@ -93,18 +101,6 @@ namespace GameColor.Core.Services
         {
             if (SerialPort.IsOpen)
                 SerialPort.Close();
-        }
-        private async Task<string> SerialWriteAsync(string data)
-        {
-            OpenSerial();
-
-            SerialPort.WriteLine(data);
-            await Task.Delay(50);
-            var response = SerialPort.ReadExisting();
-
-            CloseSerial();
-
-            return response;
         }
         #endregion
 

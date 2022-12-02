@@ -15,20 +15,6 @@ namespace GameColor.Core.Services
         #endregion
 
         #region Public Methods
-        public void Log(string text)
-        {
-            if (!_isStopped)
-            {
-                if (_logs.Count > 0)
-                {
-                    var lastLog = _logs.Last();
-                    _logs.RemoveAt(_logs.Count - 1);
-                    _logs.Add($"[{DateTime.Now.ToLongTimeString()}]: {lastLog + text}");
-                }
-                else LogLine(text);
-            }
-
-        }
         public void LogLine(string text)
         {
             if (!_isStopped)

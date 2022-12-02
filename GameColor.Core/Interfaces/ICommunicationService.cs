@@ -8,7 +8,6 @@ namespace GameColor.Core.Interfaces
         void BindPort(string comPort, int writeTimeout = 2000, int readTimeout = 2000);
         string GetBindedPort();
         Task<bool> TestConnectionAsync();
-        Task TurnOffLightsAsync();
-        Task ChangeColorAsync(AcceptedColor color);
+        void ChangeColor(byte[] rgb);
     }
 }

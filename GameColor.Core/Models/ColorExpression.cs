@@ -1,5 +1,4 @@
 ﻿using GameColor.Core.Enums;
-using GameColor.Core.Enums;
 using System.Drawing;
 
 namespace GameColor.Core.Models
@@ -8,15 +7,15 @@ namespace GameColor.Core.Models
     {
         public int PixelIndex { get; private set; }
         public Color TargetColor { get; private set; }
-        public AcceptedColor Status { get; private set; }
+        public Color ResultColor { get; private set; }
         public EvaluationStrategy Strategy { get; private set; }
         public int Priority { get; private set; }
         public int Tolerance { get; private set; }
-        public ColorExpression(int pixelIndex, Color targetColor, AcceptedColor status, int priority, int tolerance, EvaluationStrategy strategy)
+        public ColorExpression(int pixelIndex, Color targetColor, Color resultColor, int priority, int tolerance, EvaluationStrategy strategy)
         {
             TargetColor = targetColor;
             PixelIndex = pixelIndex;
-            Status = status;
+            ResultColor = resultColor;
             Priority = priority;
             Tolerance = tolerance;
             Strategy = strategy;

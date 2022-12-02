@@ -1,7 +1,9 @@
 ﻿using GameColor.Core.Enums;
 using GameColor.Core.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace GameColor.Core.Services
 {
@@ -9,15 +11,15 @@ namespace GameColor.Core.Services
     {
         private readonly ICommunicationService _communicationService;
 
-        private Action<bool> _onRedChange;
-        private Action<bool> _onGreenChange;
-        private Action<bool> _onBlueChange;
+        private Action<byte> _onRedChange;
+        private Action<byte> _onGreenChange;
+        private Action<byte> _onBlueChange;
 
         private bool _isStopped;
 
-        private bool _red;
-        private bool _green;
-        private bool _blue;
+        private byte _red;
+        private byte _green;
+        private byte _blue;
 
         public UserPresetService(ICommunicationService communicationService)
         {
@@ -25,11 +27,11 @@ namespace GameColor.Core.Services
         }
 
         #region Public Methods
-        public bool Red() => _red;
-        public bool Green() => _green;
-        public bool Blue() => _blue;
+        public byte Red() => _red;
+        public byte Green() => _green;
+        public byte Blue() => _blue;
 
-        public void ToggleColor(bool red, bool green, bool blue)
+        public void SetColor(byte red, byte green, byte blue)
         {
             _red = red;
             _green = green;
@@ -46,32 +48,56 @@ namespace GameColor.Core.Services
 
             Send();
         }
+
         public void StopUserPreset()
         {
-            _communicationService.TurnOffLightsAsync();
+            _communicationService.ChangeColor(new byte[] { 0, 0, 0 });
             _isStopped = true;
         }
-        public void ToggleRed()
+
+        public void SetRed(int value, bool mathOperation = false)
         {
-            _red = !_red;
+            if (mathOperation)
+            {
+                if (_red + value > 255) _red = 255;
+                else if (_red + value <= 0) _red = 0;
+                else _red = Convert.ToByte(_red + value);
+            }
+            else _red = Convert.ToByte(value);
+
 
             if (_onRedChange != null)
                 _onRedChange.Invoke(_red);
 
             Send();
         }
-        public void ToggleGreen()
+
+        public void SetGreen(int value, bool mathOperation = false)
         {
-            _green = !_green;
+            if (mathOperation)
+            {
+                if (_green + value > 255) _green = 255;
+                else if (_green + value <= 0) _green = 0;
+                else _green = Convert.ToByte(_green + value);
+            }
+            else _green = Convert.ToByte(value);
 
             if (_onGreenChange != null)
                 _onGreenChange.Invoke(_green);
 
+
             Send();
         }
-        public void ToggleBlue()
+
+        public void SetBlue(int value, bool mathOperation = false)
         {
-            _blue = !_blue;
+            if (mathOperation)
+            {
+                if (_blue + value > 255) _blue = 255;
+                else if (_blue + value <= 0) _blue = 0;
+                else _blue = Convert.ToByte(_blue + value);
+            }
+            else _blue = Convert.ToByte(value);
 
             if (_onBlueChange != null)
                 _onBlueChange.Invoke(_blue);
@@ -79,13 +105,13 @@ namespace GameColor.Core.Services
             Send();
         }
 
-        public void OnRedChange(Action<bool> onRedChange) => 
+        public void OnRedChange(Action<byte> onRedChange) =>
             _onRedChange = onRedChange;
 
-        public void OnGreenChange(Action<bool> onGreenChange) =>
+        public void OnGreenChange(Action<byte> onGreenChange) =>
             _onGreenChange = onGreenChange;
 
-        public void OnBlueChange(Action<bool> onBoolChange) =>
+        public void OnBlueChange(Action<byte> onBoolChange) =>
             _onBlueChange = onBoolChange;
         #endregion
 
@@ -95,22 +121,7 @@ namespace GameColor.Core.Services
             if (_isStopped)
                 _isStopped = false;
 
-            var acceptedColor = default(AcceptedColor?);
-
-            if (_red || _green || _blue)
-            {
-                if (_red && _green && _blue) acceptedColor = AcceptedColor.White;
-                else if (_red && _green && !_blue) acceptedColor = AcceptedColor.Yellow;
-                else if (_red && !_green && _blue) acceptedColor = AcceptedColor.Magenta;
-                else if (!_red && _green && _blue) acceptedColor = AcceptedColor.LightBlue;
-                else if (_red) acceptedColor = AcceptedColor.Red;
-                else if (_green) acceptedColor = AcceptedColor.Green;
-                else if (_blue) acceptedColor = AcceptedColor.Blue;
-
-                _communicationService.ChangeColorAsync(acceptedColor.Value);
-            }
-            else _communicationService.TurnOffLightsAsync();
-
+            _communicationService.ChangeColor(new byte[] { _red, _green, _blue });
         }
         #endregion
 

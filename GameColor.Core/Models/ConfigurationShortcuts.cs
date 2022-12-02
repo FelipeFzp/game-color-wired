@@ -2,9 +2,15 @@
 {
     public class ConfigurationShortcuts
     {
-        public string TurnOnRed { get; set; }
-        public string TurnOnGreen { get; set; }
-        public string TurnOnBlue { get; set; }
+        public string IncrementRed { get; set; }
+        public string DecrementRed { get; set; }
+
+        public string IncrementGreen { get; set; }
+        public string DecrementGreen { get; set; }
+
+        public string IncrementBlue { get; set; }
+        public string DecrementBlue { get; set; }
+
         public string TurnOff { get; set; }
     }
 }

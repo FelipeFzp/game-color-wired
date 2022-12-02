@@ -37,15 +37,14 @@ namespace GameColor.Core.Services
             _tempPath = Path.GetTempPath();
 
             _hooks = Hook.GlobalEvents();
-
             _hooks.KeyUp += GlobalHookKeyUp;
-            _hooks.MouseDownExt += GlobalHookMouseDownExt;
         }
         #endregion
 
         #region Public Methods
         public Configuration GetCurrentConfiguration() =>
             DeserializeConfigurationFile();
+
         public void SetDefaultConfiguration(bool reset = false)
         {
             if (reset)
@@ -55,12 +54,15 @@ namespace GameColor.Core.Services
             else
                 ApplyCurrentConfigurations(true);
         }
+
         public void DisposeConfigurations()
         {
             _hooks.Dispose();
         }
+
         public void SetConfiguration(Configuration configuration) =>
             File.WriteAllText($"{_tempPath}/{ConfigurationFile.CONFIG_FILE_NAME}.json", configuration.ToString());
+
         public void ApplyCurrentConfigurations(bool isStartup = false)
         {
             var configuration = DeserializeConfigurationFile();
@@ -104,39 +106,38 @@ namespace GameColor.Core.Services
         private void GlobalHookKeyUp(object sender, KeyEventArgs e)
         {
             var config = GetCurrentConfiguration();
-            var combination = e.Serialize();
+            var combination = e.SerializeToString();
 
             _userLoggingService.LogLine(e.KeyCode.ToString());
 
-            if (!_gamePresetService.IsRunning())
-            {
-                if (config.Shortcuts.TurnOnRed == combination)
-                    _userPresetService.ToggleRed();
-                if (config.Shortcuts.TurnOnGreen == combination)
-                    _userPresetService.ToggleGreen();
-                if (config.Shortcuts.TurnOnBlue == combination)
-                    _userPresetService.ToggleBlue();
-                if (config.Shortcuts.TurnOff == combination)
-                    _userPresetService.ToggleColor(false, false, false);
-            }
-        }
+            if (_gamePresetService.IsRunning())
+                return;
 
-        private void GlobalHookMouseDownExt(object sender, MouseEventExtArgs e)
-        {
-            var config = GetCurrentConfiguration();
-            var combination = MouseEvents.MOUSE_RIGHT_CLICK_EVENT;
+            var combinationDictionary = new Dictionary<string, Action>();
+            const int INC_DEC_STEP = 15;
+            if (config.Shortcuts.IncrementRed != null)
+                combinationDictionary.Add(config.Shortcuts.IncrementRed, () => _userPresetService.SetRed(INC_DEC_STEP, true));
 
-            if(!_gamePresetService.IsRunning())
-            {
-                if (config.Shortcuts.TurnOnRed == combination)
-                    _userPresetService.ToggleRed();
-                if (config.Shortcuts.TurnOnGreen == combination)
-                    _userPresetService.ToggleGreen();
-                if (config.Shortcuts.TurnOnBlue == combination)
-                    _userPresetService.ToggleBlue();
-                if (config.Shortcuts.TurnOff == combination)
-                    _userPresetService.ToggleColor(false, false, false);
-            }
+            if (config.Shortcuts.DecrementRed != null)
+                combinationDictionary.Add(config.Shortcuts.DecrementRed, () => _userPresetService.SetRed(-INC_DEC_STEP, true));
+
+            if (config.Shortcuts.IncrementGreen != null)
+                combinationDictionary.Add(config.Shortcuts.IncrementGreen, () => _userPresetService.SetGreen(INC_DEC_STEP, true));
+
+            if (config.Shortcuts.DecrementGreen != null)
+                combinationDictionary.Add(config.Shortcuts.DecrementGreen, () => _userPresetService.SetGreen(-INC_DEC_STEP, true));
+
+            if (config.Shortcuts.IncrementBlue != null)
+                combinationDictionary.Add(config.Shortcuts.IncrementBlue, () => _userPresetService.SetBlue(INC_DEC_STEP, true));
+
+            if (config.Shortcuts.DecrementBlue != null)
+                combinationDictionary.Add(config.Shortcuts.DecrementBlue, () => _userPresetService.SetBlue(-INC_DEC_STEP, true));
+
+            if (config.Shortcuts.TurnOff != null)
+                combinationDictionary.Add(config.Shortcuts.TurnOff, () => _userPresetService.SetColor(0, 0, 0));
+
+            combinationDictionary.TryGetValue(combination, out var shortcutAction);
+            shortcutAction?.Invoke();
         }
         #endregion
     }

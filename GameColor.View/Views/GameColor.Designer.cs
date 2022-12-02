@@ -42,12 +42,15 @@
             this.ComboBox_GamePreset = new MetroFramework.Controls.MetroComboBox();
             this.Button_StartGamePreset = new System.Windows.Forms.Button();
             this.Tab_UserPreset = new MetroFramework.Controls.MetroTabPage();
-            this.Checkbox_Blue = new MetroFramework.Controls.MetroCheckBox();
-            this.Checkbox_Green = new MetroFramework.Controls.MetroCheckBox();
-            this.Checkbox_Red = new MetroFramework.Controls.MetroCheckBox();
             this.ComboBox_Ports = new MetroFramework.Controls.MetroComboBox();
             this.Label_PortErrorMessage = new System.Windows.Forms.Label();
             this.Label_Slogan = new MetroFramework.Controls.MetroLabel();
+            this.TrackBar_Red = new MetroFramework.Controls.MetroTrackBar();
+            this.TrackBar_Green = new MetroFramework.Controls.MetroTrackBar();
+            this.TrackBar_Blue = new MetroFramework.Controls.MetroTrackBar();
+            this.Label_Red = new MetroFramework.Controls.MetroLabel();
+            this.Label_Green = new MetroFramework.Controls.MetroLabel();
+            this.Label_Blue = new MetroFramework.Controls.MetroLabel();
             this.TabControl_Presets.SuspendLayout();
             this.Tab_Home.SuspendLayout();
             this.Tile_PresetsGenerator.SuspendLayout();
@@ -66,7 +69,7 @@
             this.TabControl_Presets.Controls.Add(this.Tab_UserPreset);
             this.TabControl_Presets.Location = new System.Drawing.Point(0, 76);
             this.TabControl_Presets.Name = "TabControl_Presets";
-            this.TabControl_Presets.SelectedIndex = 0;
+            this.TabControl_Presets.SelectedIndex = 2;
             this.TabControl_Presets.Size = new System.Drawing.Size(335, 242);
             this.TabControl_Presets.TabIndex = 0;
             this.TabControl_Presets.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.TabControl_Presets_Selecting);
@@ -175,8 +178,10 @@
             this.ListView_UserLog.ForeColor = System.Drawing.Color.White;
             this.ListView_UserLog.FullRowSelect = true;
             this.ListView_UserLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.ListView_UserLog.HideSelection = false;
             this.ListView_UserLog.LabelWrap = false;
             this.ListView_UserLog.Location = new System.Drawing.Point(7, 47);
+            this.ListView_UserLog.MinimumSize = new System.Drawing.Size(312, 153);
             this.ListView_UserLog.Name = "ListView_UserLog";
             this.ListView_UserLog.Size = new System.Drawing.Size(312, 153);
             this.ListView_UserLog.TabIndex = 5;
@@ -216,9 +221,12 @@
             // 
             // Tab_UserPreset
             // 
-            this.Tab_UserPreset.Controls.Add(this.Checkbox_Blue);
-            this.Tab_UserPreset.Controls.Add(this.Checkbox_Green);
-            this.Tab_UserPreset.Controls.Add(this.Checkbox_Red);
+            this.Tab_UserPreset.Controls.Add(this.Label_Blue);
+            this.Tab_UserPreset.Controls.Add(this.Label_Green);
+            this.Tab_UserPreset.Controls.Add(this.Label_Red);
+            this.Tab_UserPreset.Controls.Add(this.TrackBar_Blue);
+            this.Tab_UserPreset.Controls.Add(this.TrackBar_Green);
+            this.Tab_UserPreset.Controls.Add(this.TrackBar_Red);
             this.Tab_UserPreset.HorizontalScrollbarBarColor = true;
             this.Tab_UserPreset.Location = new System.Drawing.Point(4, 35);
             this.Tab_UserPreset.Name = "Tab_UserPreset";
@@ -227,42 +235,6 @@
             this.Tab_UserPreset.TabIndex = 0;
             this.Tab_UserPreset.Text = "User Preset";
             this.Tab_UserPreset.VerticalScrollbarBarColor = true;
-            // 
-            // Checkbox_Blue
-            // 
-            this.Checkbox_Blue.AutoSize = true;
-            this.Checkbox_Blue.Enabled = false;
-            this.Checkbox_Blue.Location = new System.Drawing.Point(19, 87);
-            this.Checkbox_Blue.Name = "Checkbox_Blue";
-            this.Checkbox_Blue.Size = new System.Drawing.Size(46, 15);
-            this.Checkbox_Blue.TabIndex = 4;
-            this.Checkbox_Blue.Text = "Blue";
-            this.Checkbox_Blue.UseVisualStyleBackColor = true;
-            this.Checkbox_Blue.CheckedChanged += new System.EventHandler(this.Checkbox_Blue_CheckedChanged);
-            // 
-            // Checkbox_Green
-            // 
-            this.Checkbox_Green.AutoSize = true;
-            this.Checkbox_Green.Enabled = false;
-            this.Checkbox_Green.Location = new System.Drawing.Point(19, 51);
-            this.Checkbox_Green.Name = "Checkbox_Green";
-            this.Checkbox_Green.Size = new System.Drawing.Size(54, 15);
-            this.Checkbox_Green.TabIndex = 3;
-            this.Checkbox_Green.Text = "Green";
-            this.Checkbox_Green.UseVisualStyleBackColor = true;
-            this.Checkbox_Green.CheckedChanged += new System.EventHandler(this.Checkbox_Green_CheckedChanged);
-            // 
-            // Checkbox_Red
-            // 
-            this.Checkbox_Red.AutoSize = true;
-            this.Checkbox_Red.Enabled = false;
-            this.Checkbox_Red.Location = new System.Drawing.Point(19, 17);
-            this.Checkbox_Red.Name = "Checkbox_Red";
-            this.Checkbox_Red.Size = new System.Drawing.Size(43, 15);
-            this.Checkbox_Red.TabIndex = 2;
-            this.Checkbox_Red.Text = "Red";
-            this.Checkbox_Red.UseVisualStyleBackColor = true;
-            this.Checkbox_Red.CheckedChanged += new System.EventHandler(this.Checkbox_Red_CheckedChanged);
             // 
             // ComboBox_Ports
             // 
@@ -295,9 +267,78 @@
             this.Label_Slogan.BackColor = System.Drawing.Color.Transparent;
             this.Label_Slogan.Location = new System.Drawing.Point(24, 47);
             this.Label_Slogan.Name = "Label_Slogan";
-            this.Label_Slogan.Size = new System.Drawing.Size(151, 19);
+            this.Label_Slogan.Size = new System.Drawing.Size(131, 19);
             this.Label_Slogan.TabIndex = 6;
-            this.Label_Slogan.Text = "Intelligent Ambient Light";
+            this.Label_Slogan.Text = "Smart Ambient Light";
+            // 
+            // TrackBar_Red
+            // 
+            this.TrackBar_Red.BackColor = System.Drawing.Color.Transparent;
+            this.TrackBar_Red.Enabled = false;
+            this.TrackBar_Red.Location = new System.Drawing.Point(55, 23);
+            this.TrackBar_Red.Maximum = 255;
+            this.TrackBar_Red.Name = "TrackBar_Red";
+            this.TrackBar_Red.Size = new System.Drawing.Size(252, 23);
+            this.TrackBar_Red.TabIndex = 5;
+            this.TrackBar_Red.Text = "Red";
+            this.TrackBar_Red.Value = 0;
+            this.TrackBar_Red.ValueChanged += new System.EventHandler(this.TrackBar_Red_ValueChanged);
+            // 
+            // TrackBar_Green
+            // 
+            this.TrackBar_Green.BackColor = System.Drawing.Color.Transparent;
+            this.TrackBar_Green.Enabled = false;
+            this.TrackBar_Green.Location = new System.Drawing.Point(55, 63);
+            this.TrackBar_Green.Maximum = 255;
+            this.TrackBar_Green.Name = "TrackBar_Green";
+            this.TrackBar_Green.Size = new System.Drawing.Size(252, 23);
+            this.TrackBar_Green.TabIndex = 6;
+            this.TrackBar_Green.Text = "Green";
+            this.TrackBar_Green.Value = 0;
+            this.TrackBar_Green.ValueChanged += new System.EventHandler(this.TrackBar_Green_ValueChanged);
+            // 
+            // TrackBar_Blue
+            // 
+            this.TrackBar_Blue.BackColor = System.Drawing.Color.Transparent;
+            this.TrackBar_Blue.Enabled = false;
+            this.TrackBar_Blue.Location = new System.Drawing.Point(55, 105);
+            this.TrackBar_Blue.Maximum = 255;
+            this.TrackBar_Blue.Name = "TrackBar_Blue";
+            this.TrackBar_Blue.Size = new System.Drawing.Size(252, 23);
+            this.TrackBar_Blue.TabIndex = 7;
+            this.TrackBar_Blue.Text = "Blue";
+            this.TrackBar_Blue.Value = 0;
+            this.TrackBar_Blue.ValueChanged += new System.EventHandler(this.TrackBar_Blue_ValueChanged);
+            // 
+            // Label_Red
+            // 
+            this.Label_Red.AutoSize = true;
+            this.Label_Red.BackColor = System.Drawing.Color.Transparent;
+            this.Label_Red.Location = new System.Drawing.Point(3, 23);
+            this.Label_Red.Name = "Label_Red";
+            this.Label_Red.Size = new System.Drawing.Size(32, 19);
+            this.Label_Red.TabIndex = 8;
+            this.Label_Red.Text = "Red";
+            // 
+            // Label_Green
+            // 
+            this.Label_Green.AutoSize = true;
+            this.Label_Green.BackColor = System.Drawing.Color.Transparent;
+            this.Label_Green.Location = new System.Drawing.Point(3, 63);
+            this.Label_Green.Name = "Label_Green";
+            this.Label_Green.Size = new System.Drawing.Size(44, 19);
+            this.Label_Green.TabIndex = 9;
+            this.Label_Green.Text = "Green";
+            // 
+            // Label_Blue
+            // 
+            this.Label_Blue.AutoSize = true;
+            this.Label_Blue.BackColor = System.Drawing.Color.Transparent;
+            this.Label_Blue.Location = new System.Drawing.Point(3, 105);
+            this.Label_Blue.Name = "Label_Blue";
+            this.Label_Blue.Size = new System.Drawing.Size(34, 19);
+            this.Label_Blue.TabIndex = 10;
+            this.Label_Blue.Text = "Blue";
             // 
             // GameColor
             // 
@@ -330,9 +371,6 @@
         private MetroFramework.Controls.MetroTabControl TabControl_Presets;
         private MetroFramework.Controls.MetroTabPage Tab_UserPreset;
         private MetroFramework.Controls.MetroTabPage Tab_GamePreset;
-        private MetroFramework.Controls.MetroCheckBox Checkbox_Blue;
-        private MetroFramework.Controls.MetroCheckBox Checkbox_Green;
-        private MetroFramework.Controls.MetroCheckBox Checkbox_Red;
         private System.Windows.Forms.Button Button_StartGamePreset;
         private MetroFramework.Controls.MetroComboBox ComboBox_GamePreset;
         private MetroFramework.Controls.MetroComboBox ComboBox_Ports;
@@ -346,5 +384,11 @@
         private MetroFramework.Controls.MetroTile Tile_PresetsGenerator;
         private System.Windows.Forms.Button Button_LaunchSettings;
         private System.Windows.Forms.Button Button_LaunchPresetsCreator;
+        private MetroFramework.Controls.MetroLabel Label_Blue;
+        private MetroFramework.Controls.MetroLabel Label_Green;
+        private MetroFramework.Controls.MetroLabel Label_Red;
+        private MetroFramework.Controls.MetroTrackBar TrackBar_Blue;
+        private MetroFramework.Controls.MetroTrackBar TrackBar_Green;
+        private MetroFramework.Controls.MetroTrackBar TrackBar_Red;
     }
 }

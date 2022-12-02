@@ -1,7 +1,6 @@
 ﻿using ColorMine.ColorSpaces;
 using GameColor.Core.Enums;
 using GameColor.Core.DllImports;
-using GameColor.Core.Enums;
 using GameColor.Core.Helpers;
 using GameColor.Core.Interfaces;
 using GameColor.Core.Models;
@@ -11,13 +10,14 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading;
+using System.IO;
 
 namespace GameColor.Core.Services
 {
     public class GamePresetService : IGamePresetService
     {
         #region Fields
-        private AcceptedColor _lastHealthLevel;
+        private Color _lastHealthLevel;
         private Process _windowsProcess;
 
         private static volatile bool _isStopped = true;
@@ -42,9 +42,9 @@ namespace GameColor.Core.Services
             _userProcess = new WatchedProcess("FortniteClient-Win64-Shipping", 672, 829, 265, 15,
                                   new ColorExpression(100, Color.FromArgb(140, 90, 200), 4, 20, EvaluationStrategy.KeepLast),
                                   new ColorExpression(100, Color.FromArgb(49, 115, 124), 4, 20, EvaluationStrategy.KeepLast),
-                                  new ColorExpression(200, Color.FromArgb(99, 202, 70), AcceptedColor.Green, 3, 20, EvaluationStrategy.Normal),
-                                  new ColorExpression(100, Color.FromArgb(99, 202, 70), AcceptedColor.Yellow, 2, 20, EvaluationStrategy.Normal),
-                                  new ColorExpression(70, Color.FromArgb(99, 202, 70), AcceptedColor.Red, 1, 20, EvaluationStrategy.Normal));
+                                  new ColorExpression(200, Color.FromArgb(99, 202, 70), Color.FromArgb(0, 255, 0), 3, 20, EvaluationStrategy.Normal),
+                                  new ColorExpression(100, Color.FromArgb(99, 202, 70), Color.FromArgb(0, 255, 255), 2, 20, EvaluationStrategy.Normal),
+                                  new ColorExpression(70, Color.FromArgb(99, 202, 70), Color.FromArgb(255, 0, 0), 1, 20, EvaluationStrategy.Normal));
         }
         public void StartApplicationWatcher()
         {
@@ -74,7 +74,7 @@ namespace GameColor.Core.Services
                         _windowsProcess = GetCurrentWindowsProcess();
                     }
 
-                    Thread.Sleep(500);
+                    Thread.Sleep(1000);
                 }
             }); 
 
@@ -84,7 +84,7 @@ namespace GameColor.Core.Services
         public void StopApplicationWatcher()
         {
             _isStopped = true;
-            _communicationService.TurnOffLightsAsync();
+            _communicationService.ChangeColor(new byte[] {0,0,0});
             _userLoggingService.LogLine("Stopping Application Watcher...");
         }
         public bool IsRunning()
@@ -122,7 +122,7 @@ namespace GameColor.Core.Services
             var highestHealthLevel = _userProcess.Expression
                                         .OrderBy(p => p.Priority)
                                         .First()
-                                        .Status;
+                                        .ResultColor;
 
             _userProcess.Expression
                     .OrderBy(p => p.Priority)
@@ -141,16 +141,17 @@ namespace GameColor.Core.Services
                             if (e.Strategy == EvaluationStrategy.KeepLast)
                                 highestHealthLevel = _lastHealthLevel;
                             else
-                                highestHealthLevel = e.Status;
+                                highestHealthLevel = e.ResultColor;
                         }
                         #region Debug
                         //screenshot.Bitmap.MarkPixel(e.PixelIndex, 0, e.Status);
                         #endregion
                     });
+
             _lastHealthLevel = highestHealthLevel;
 
             _userLoggingService.LogLine($"Health: {highestHealthLevel}");
-            _communicationService.ChangeColorAsync(highestHealthLevel);
+            _communicationService.ChangeColor(new byte[] { highestHealthLevel.R, highestHealthLevel.G, highestHealthLevel.B });
         }
         private Screenshot TakeScreenshot()
         {
@@ -160,14 +161,17 @@ namespace GameColor.Core.Services
 
             #region Debug
             //"Capturando tela...".LogLine();
-            //    bitmap.Save($"{Directory.GetCurrentDirectory()}\\SCREEN.png", ImageFormat.Png);
+            //bitmap.Save($"{Directory.GetCurrentDirectory()}\\SCREEN.png", ImageFormat.Png);
             #endregion
 
             return new Screenshot(bitmap, rect);
         }
         private double CompareLabColors(Lab currentLab, Lab expectedLab)
         {
-            return Math.Sqrt(Math.Pow(expectedLab.L - currentLab.L, 2) + Math.Pow(expectedLab.A - currentLab.A, 2) + Math.Pow(expectedLab.B - currentLab.B, 2));
+            return Math.Sqrt(
+                Math.Pow(expectedLab.L - currentLab.L, 2) + 
+                Math.Pow(expectedLab.A - currentLab.A, 2) + 
+                Math.Pow(expectedLab.B - currentLab.B, 2));
         }
         #endregion
     }
