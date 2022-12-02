@@ -137,11 +137,13 @@ namespace GameColor.Core.Services
                             highestHealthLevel = e.ResultColor;
 
                         #region Debug
-                        screenshot.Bitmap.MarkPixel(e.X, e.Y, e.ResultColor);
+                        //screenshot.Bitmap.MarkPixel(e.X, e.Y, e.ResultColor);
                         #endregion
                     });
 
-            screenshot.Bitmap.Save($"{Directory.GetCurrentDirectory()}\\SCREEN.png", ImageFormat.Png);
+            #region Debug
+            //screenshot.Bitmap.Save($"{Directory.GetCurrentDirectory()}\\SCREEN.png", ImageFormat.Png);
+            #endregion
 
             _lastHealthLevel = highestHealthLevel;
 
@@ -153,11 +155,6 @@ namespace GameColor.Core.Services
             var rect = new User32.Rectangle();
             User32.GetWindowRect(_windowsProcess.MainWindowHandle, ref rect);
             var bitmap = new System.Drawing.Bitmap(_userProcess.Width, _userProcess.Height, PixelFormat.Format32bppArgb);
-
-            #region Debug
-            //"Capturando tela...".LogLine();
-            //bitmap.Save($"{Directory.GetCurrentDirectory()}\\SCREEN.png", ImageFormat.Png);
-            #endregion
 
             return new Screenshot(bitmap, rect);
         }
