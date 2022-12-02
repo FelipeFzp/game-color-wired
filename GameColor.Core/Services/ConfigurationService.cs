@@ -21,18 +21,25 @@ namespace GameColor.Core.Services
         private readonly IUserLoggingService _userLoggingService;
         private readonly IUserPresetService _userPresetService;
         private readonly IGamePresetService _gamePresetService;
+        private readonly ICommunicationService _communicationService;
         private readonly IKeyboardMouseEvents _hooks;
 
         #endregion
 
         #region Constructor
-        public ConfigurationService(string applicationExecutablePath, IUserPresetService userPresetService, IGamePresetService gamePresetService, IUserLoggingService userLoggingService)
+        public ConfigurationService(
+            string applicationExecutablePath, 
+            IUserPresetService userPresetService, 
+            IGamePresetService gamePresetService, 
+            IUserLoggingService userLoggingService,
+            ICommunicationService communicationService)
         {
             _applicationExecutablePath = applicationExecutablePath;
 
             _userPresetService = userPresetService;
             _gamePresetService = gamePresetService;
             _userLoggingService = userLoggingService;
+            _communicationService = communicationService;
 
             _tempPath = Path.GetTempPath();
 
@@ -105,6 +112,8 @@ namespace GameColor.Core.Services
 
         private void GlobalHookKeyUp(object sender, KeyEventArgs e)
         {
+            if (string.IsNullOrEmpty(_communicationService.GetBindedPort())) return;
+
             var config = GetCurrentConfiguration();
             var combination = e.SerializeToString();
 
@@ -114,6 +123,8 @@ namespace GameColor.Core.Services
                 return;
 
             var combinationDictionary = new Dictionary<string, Action>();
+
+
             const int INC_DEC_STEP = 15;
             if (config.Shortcuts.IncrementRed != null)
                 combinationDictionary.Add(config.Shortcuts.IncrementRed, () => _userPresetService.SetRed(INC_DEC_STEP, true));
