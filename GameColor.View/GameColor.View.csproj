@@ -34,6 +34,10 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\GameColor.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MetroFramework, Version=1.2.0.3, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
       <HintPath>..\packages\MetroFramework.RunTime.1.2.0.3\lib\net40-Client\MetroFramework.dll</HintPath>
@@ -71,6 +75,12 @@
     <Compile Include="Views\GameColor.Designer.cs">
       <DependentUpon>GameColor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\PresetCreatorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\PresetCreatorDialog.Designer.cs">
+      <DependentUpon>PresetCreatorDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,10 +100,14 @@
     <EmbeddedResource Include="Views\GameColor.resx">
       <DependentUpon>GameColor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\PresetCreatorDialog.resx">
+      <DependentUpon>PresetCreatorDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\SettingsDialog.resx">
       <DependentUpon>SettingsDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="app.manifest" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

@@ -55,13 +55,11 @@ namespace GameColor.Core.Services
                 {
                     if (_windowsProcess != null && !_windowsProcess.HasExited && !_isStopped)
                     {
-                        var screenshot = TakeScreenshot();
-                        var graphics = screenshot.Bitmap.ToGraphics();
-
-                        var unit = GraphicsUnit.Pixel;
-                        var bounds = screenshot.Bitmap.GetBounds(ref unit);
-
-                        graphics.CopyFromScreen(_userProcess.Left, _userProcess.Top, 0, 0, new Size(screenshot.Bitmap.Width, screenshot.Bitmap.Height), CopyPixelOperation.SourceCopy);
+                        var screenshot = ScreenshotHelper.TakeScreenshot(
+                            _userProcess.Width,
+                            _userProcess.Height,
+                            _userProcess.Left,
+                            _userProcess.Top);
 
                         EvaluateColorExpressions(screenshot);
                     }
@@ -116,7 +114,7 @@ namespace GameColor.Core.Services
 
             return proc;
         }
-        private void EvaluateColorExpressions(Screenshot screenshot)
+        private void EvaluateColorExpressions(Bitmap bitmap)
         {
             var highestHealthLevel = _userProcess.Expression
                                         .Last()
@@ -127,7 +125,7 @@ namespace GameColor.Core.Services
                     .ToList()
                     .ForEach(e =>
                     {
-                        var pixel = screenshot.Bitmap.GetPixel(e.X, e.Y);
+                        var pixel = bitmap.GetPixel(e.X, e.Y);
                         var currentLab = ColorHelper.CreateLabFromRgb(pixel.R, pixel.G, pixel.B);
                         var expectedLab = ColorHelper.CreateLabFromRgb(e.TargetColor.R, e.TargetColor.G, e.TargetColor.B);
 
@@ -137,12 +135,12 @@ namespace GameColor.Core.Services
                             highestHealthLevel = e.ResultColor;
 
                         #region Debug
-                        //screenshot.Bitmap.MarkPixel(e.X, e.Y, e.ResultColor);
+                        //bitmap.MarkPixel(e.X, e.Y, e.ResultColor);
                         #endregion
                     });
 
             #region Debug
-            //screenshot.Bitmap.Save($"{Directory.GetCurrentDirectory()}\\SCREEN.png", ImageFormat.Png);
+            //bitmap.Save($"{Directory.GetCurrentDirectory()}\\SCREEN.png", ImageFormat.Png);
             #endregion
 
             _lastHealthLevel = highestHealthLevel;
@@ -150,14 +148,7 @@ namespace GameColor.Core.Services
             _userLoggingService.LogLine($"Health: {highestHealthLevel}");
             _communicationService.ChangeColor(new byte[] { highestHealthLevel.R, highestHealthLevel.G, highestHealthLevel.B });
         }
-        private Screenshot TakeScreenshot()
-        {
-            var rect = new User32.Rectangle();
-            User32.GetWindowRect(_windowsProcess.MainWindowHandle, ref rect);
-            var bitmap = new System.Drawing.Bitmap(_userProcess.Width, _userProcess.Height, PixelFormat.Format32bppArgb);
 
-            return new Screenshot(bitmap, rect);
-        }
         private double CompareLabColors(Lab currentLab, Lab expectedLab)
         {
             return Math.Sqrt(

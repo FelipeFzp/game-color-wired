@@ -279,5 +279,8 @@ namespace GameColor.View.Views
         private void TabControl_Presets_KeyDown(object sender, KeyEventArgs e) =>
             e.Handled = true;
         #endregion
+
+        private void Tile_PresetsGenerator_Click(object sender, EventArgs e) =>
+            new PresetCreatorDialog().ShowDialog();
     }
 }

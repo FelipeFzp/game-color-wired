@@ -36,27 +36,27 @@
             this.Tile_Informations = new MetroFramework.Controls.MetroTile();
             this.Tile_Settings = new MetroFramework.Controls.MetroTile();
             this.Button_LaunchSettings = new System.Windows.Forms.Button();
+            this.Tab_UserPreset = new MetroFramework.Controls.MetroTabPage();
+            this.Label_Blue = new MetroFramework.Controls.MetroLabel();
+            this.Label_Green = new MetroFramework.Controls.MetroLabel();
+            this.Label_Red = new MetroFramework.Controls.MetroLabel();
+            this.TrackBar_Blue = new MetroFramework.Controls.MetroTrackBar();
+            this.TrackBar_Green = new MetroFramework.Controls.MetroTrackBar();
+            this.TrackBar_Red = new MetroFramework.Controls.MetroTrackBar();
             this.Tab_GamePreset = new MetroFramework.Controls.MetroTabPage();
             this.ListView_UserLog = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ComboBox_GamePreset = new MetroFramework.Controls.MetroComboBox();
             this.Button_StartGamePreset = new System.Windows.Forms.Button();
-            this.Tab_UserPreset = new MetroFramework.Controls.MetroTabPage();
             this.ComboBox_Ports = new MetroFramework.Controls.MetroComboBox();
             this.Label_PortErrorMessage = new System.Windows.Forms.Label();
             this.Label_Slogan = new MetroFramework.Controls.MetroLabel();
-            this.TrackBar_Red = new MetroFramework.Controls.MetroTrackBar();
-            this.TrackBar_Green = new MetroFramework.Controls.MetroTrackBar();
-            this.TrackBar_Blue = new MetroFramework.Controls.MetroTrackBar();
-            this.Label_Red = new MetroFramework.Controls.MetroLabel();
-            this.Label_Green = new MetroFramework.Controls.MetroLabel();
-            this.Label_Blue = new MetroFramework.Controls.MetroLabel();
             this.TabControl_Presets.SuspendLayout();
             this.Tab_Home.SuspendLayout();
             this.Tile_PresetsGenerator.SuspendLayout();
             this.Tile_Settings.SuspendLayout();
-            this.Tab_GamePreset.SuspendLayout();
             this.Tab_UserPreset.SuspendLayout();
+            this.Tab_GamePreset.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl_Presets
@@ -69,7 +69,7 @@
             this.TabControl_Presets.Controls.Add(this.Tab_UserPreset);
             this.TabControl_Presets.Location = new System.Drawing.Point(0, 76);
             this.TabControl_Presets.Name = "TabControl_Presets";
-            this.TabControl_Presets.SelectedIndex = 2;
+            this.TabControl_Presets.SelectedIndex = 0;
             this.TabControl_Presets.Size = new System.Drawing.Size(335, 242);
             this.TabControl_Presets.TabIndex = 0;
             this.TabControl_Presets.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.TabControl_Presets_Selecting);
@@ -98,6 +98,7 @@
             this.Tile_PresetsGenerator.Text = "Game Presets Creator";
             this.Tile_PresetsGenerator.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.Tile_PresetsGenerator.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
+            this.Tile_PresetsGenerator.Click += new System.EventHandler(this.Tile_PresetsGenerator_Click);
             // 
             // Button_LaunchPresetsCreator
             // 
@@ -153,6 +154,92 @@
             this.Button_LaunchSettings.TabIndex = 0;
             this.Button_LaunchSettings.UseVisualStyleBackColor = false;
             this.Button_LaunchSettings.Click += new System.EventHandler(this.Tile_Settings_Click);
+            // 
+            // Tab_UserPreset
+            // 
+            this.Tab_UserPreset.Controls.Add(this.Label_Blue);
+            this.Tab_UserPreset.Controls.Add(this.Label_Green);
+            this.Tab_UserPreset.Controls.Add(this.Label_Red);
+            this.Tab_UserPreset.Controls.Add(this.TrackBar_Blue);
+            this.Tab_UserPreset.Controls.Add(this.TrackBar_Green);
+            this.Tab_UserPreset.Controls.Add(this.TrackBar_Red);
+            this.Tab_UserPreset.HorizontalScrollbarBarColor = true;
+            this.Tab_UserPreset.Location = new System.Drawing.Point(4, 35);
+            this.Tab_UserPreset.Name = "Tab_UserPreset";
+            this.Tab_UserPreset.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.Tab_UserPreset.Size = new System.Drawing.Size(327, 203);
+            this.Tab_UserPreset.TabIndex = 0;
+            this.Tab_UserPreset.Text = "User Preset";
+            this.Tab_UserPreset.VerticalScrollbarBarColor = true;
+            // 
+            // Label_Blue
+            // 
+            this.Label_Blue.AutoSize = true;
+            this.Label_Blue.BackColor = System.Drawing.Color.Transparent;
+            this.Label_Blue.Location = new System.Drawing.Point(3, 105);
+            this.Label_Blue.Name = "Label_Blue";
+            this.Label_Blue.Size = new System.Drawing.Size(34, 19);
+            this.Label_Blue.TabIndex = 10;
+            this.Label_Blue.Text = "Blue";
+            // 
+            // Label_Green
+            // 
+            this.Label_Green.AutoSize = true;
+            this.Label_Green.BackColor = System.Drawing.Color.Transparent;
+            this.Label_Green.Location = new System.Drawing.Point(3, 63);
+            this.Label_Green.Name = "Label_Green";
+            this.Label_Green.Size = new System.Drawing.Size(44, 19);
+            this.Label_Green.TabIndex = 9;
+            this.Label_Green.Text = "Green";
+            // 
+            // Label_Red
+            // 
+            this.Label_Red.AutoSize = true;
+            this.Label_Red.BackColor = System.Drawing.Color.Transparent;
+            this.Label_Red.Location = new System.Drawing.Point(3, 23);
+            this.Label_Red.Name = "Label_Red";
+            this.Label_Red.Size = new System.Drawing.Size(32, 19);
+            this.Label_Red.TabIndex = 8;
+            this.Label_Red.Text = "Red";
+            // 
+            // TrackBar_Blue
+            // 
+            this.TrackBar_Blue.BackColor = System.Drawing.Color.Transparent;
+            this.TrackBar_Blue.Enabled = false;
+            this.TrackBar_Blue.Location = new System.Drawing.Point(55, 105);
+            this.TrackBar_Blue.Maximum = 255;
+            this.TrackBar_Blue.Name = "TrackBar_Blue";
+            this.TrackBar_Blue.Size = new System.Drawing.Size(252, 23);
+            this.TrackBar_Blue.TabIndex = 7;
+            this.TrackBar_Blue.Text = "Blue";
+            this.TrackBar_Blue.Value = 0;
+            this.TrackBar_Blue.ValueChanged += new System.EventHandler(this.TrackBar_Blue_ValueChanged);
+            // 
+            // TrackBar_Green
+            // 
+            this.TrackBar_Green.BackColor = System.Drawing.Color.Transparent;
+            this.TrackBar_Green.Enabled = false;
+            this.TrackBar_Green.Location = new System.Drawing.Point(55, 63);
+            this.TrackBar_Green.Maximum = 255;
+            this.TrackBar_Green.Name = "TrackBar_Green";
+            this.TrackBar_Green.Size = new System.Drawing.Size(252, 23);
+            this.TrackBar_Green.TabIndex = 6;
+            this.TrackBar_Green.Text = "Green";
+            this.TrackBar_Green.Value = 0;
+            this.TrackBar_Green.ValueChanged += new System.EventHandler(this.TrackBar_Green_ValueChanged);
+            // 
+            // TrackBar_Red
+            // 
+            this.TrackBar_Red.BackColor = System.Drawing.Color.Transparent;
+            this.TrackBar_Red.Enabled = false;
+            this.TrackBar_Red.Location = new System.Drawing.Point(55, 23);
+            this.TrackBar_Red.Maximum = 255;
+            this.TrackBar_Red.Name = "TrackBar_Red";
+            this.TrackBar_Red.Size = new System.Drawing.Size(252, 23);
+            this.TrackBar_Red.TabIndex = 5;
+            this.TrackBar_Red.Text = "Red";
+            this.TrackBar_Red.Value = 0;
+            this.TrackBar_Red.ValueChanged += new System.EventHandler(this.TrackBar_Red_ValueChanged);
             // 
             // Tab_GamePreset
             // 
@@ -219,23 +306,6 @@
             this.Button_StartGamePreset.UseVisualStyleBackColor = true;
             this.Button_StartGamePreset.Click += new System.EventHandler(this.Button_StartGamePreset_Click);
             // 
-            // Tab_UserPreset
-            // 
-            this.Tab_UserPreset.Controls.Add(this.Label_Blue);
-            this.Tab_UserPreset.Controls.Add(this.Label_Green);
-            this.Tab_UserPreset.Controls.Add(this.Label_Red);
-            this.Tab_UserPreset.Controls.Add(this.TrackBar_Blue);
-            this.Tab_UserPreset.Controls.Add(this.TrackBar_Green);
-            this.Tab_UserPreset.Controls.Add(this.TrackBar_Red);
-            this.Tab_UserPreset.HorizontalScrollbarBarColor = true;
-            this.Tab_UserPreset.Location = new System.Drawing.Point(4, 35);
-            this.Tab_UserPreset.Name = "Tab_UserPreset";
-            this.Tab_UserPreset.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.Tab_UserPreset.Size = new System.Drawing.Size(327, 203);
-            this.Tab_UserPreset.TabIndex = 0;
-            this.Tab_UserPreset.Text = "User Preset";
-            this.Tab_UserPreset.VerticalScrollbarBarColor = true;
-            // 
             // ComboBox_Ports
             // 
             this.ComboBox_Ports.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -271,75 +341,6 @@
             this.Label_Slogan.TabIndex = 6;
             this.Label_Slogan.Text = "Smart Ambient Light";
             // 
-            // TrackBar_Red
-            // 
-            this.TrackBar_Red.BackColor = System.Drawing.Color.Transparent;
-            this.TrackBar_Red.Enabled = false;
-            this.TrackBar_Red.Location = new System.Drawing.Point(55, 23);
-            this.TrackBar_Red.Maximum = 255;
-            this.TrackBar_Red.Name = "TrackBar_Red";
-            this.TrackBar_Red.Size = new System.Drawing.Size(252, 23);
-            this.TrackBar_Red.TabIndex = 5;
-            this.TrackBar_Red.Text = "Red";
-            this.TrackBar_Red.Value = 0;
-            this.TrackBar_Red.ValueChanged += new System.EventHandler(this.TrackBar_Red_ValueChanged);
-            // 
-            // TrackBar_Green
-            // 
-            this.TrackBar_Green.BackColor = System.Drawing.Color.Transparent;
-            this.TrackBar_Green.Enabled = false;
-            this.TrackBar_Green.Location = new System.Drawing.Point(55, 63);
-            this.TrackBar_Green.Maximum = 255;
-            this.TrackBar_Green.Name = "TrackBar_Green";
-            this.TrackBar_Green.Size = new System.Drawing.Size(252, 23);
-            this.TrackBar_Green.TabIndex = 6;
-            this.TrackBar_Green.Text = "Green";
-            this.TrackBar_Green.Value = 0;
-            this.TrackBar_Green.ValueChanged += new System.EventHandler(this.TrackBar_Green_ValueChanged);
-            // 
-            // TrackBar_Blue
-            // 
-            this.TrackBar_Blue.BackColor = System.Drawing.Color.Transparent;
-            this.TrackBar_Blue.Enabled = false;
-            this.TrackBar_Blue.Location = new System.Drawing.Point(55, 105);
-            this.TrackBar_Blue.Maximum = 255;
-            this.TrackBar_Blue.Name = "TrackBar_Blue";
-            this.TrackBar_Blue.Size = new System.Drawing.Size(252, 23);
-            this.TrackBar_Blue.TabIndex = 7;
-            this.TrackBar_Blue.Text = "Blue";
-            this.TrackBar_Blue.Value = 0;
-            this.TrackBar_Blue.ValueChanged += new System.EventHandler(this.TrackBar_Blue_ValueChanged);
-            // 
-            // Label_Red
-            // 
-            this.Label_Red.AutoSize = true;
-            this.Label_Red.BackColor = System.Drawing.Color.Transparent;
-            this.Label_Red.Location = new System.Drawing.Point(3, 23);
-            this.Label_Red.Name = "Label_Red";
-            this.Label_Red.Size = new System.Drawing.Size(32, 19);
-            this.Label_Red.TabIndex = 8;
-            this.Label_Red.Text = "Red";
-            // 
-            // Label_Green
-            // 
-            this.Label_Green.AutoSize = true;
-            this.Label_Green.BackColor = System.Drawing.Color.Transparent;
-            this.Label_Green.Location = new System.Drawing.Point(3, 63);
-            this.Label_Green.Name = "Label_Green";
-            this.Label_Green.Size = new System.Drawing.Size(44, 19);
-            this.Label_Green.TabIndex = 9;
-            this.Label_Green.Text = "Green";
-            // 
-            // Label_Blue
-            // 
-            this.Label_Blue.AutoSize = true;
-            this.Label_Blue.BackColor = System.Drawing.Color.Transparent;
-            this.Label_Blue.Location = new System.Drawing.Point(3, 105);
-            this.Label_Blue.Name = "Label_Blue";
-            this.Label_Blue.Size = new System.Drawing.Size(34, 19);
-            this.Label_Blue.TabIndex = 10;
-            this.Label_Blue.Text = "Blue";
-            // 
             // GameColor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -352,15 +353,16 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(335, 298);
             this.Name = "GameColor";
+            this.Resizable = false;
             this.Text = "Game Color";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameColor_FormClosing);
             this.TabControl_Presets.ResumeLayout(false);
             this.Tab_Home.ResumeLayout(false);
             this.Tile_PresetsGenerator.ResumeLayout(false);
             this.Tile_Settings.ResumeLayout(false);
-            this.Tab_GamePreset.ResumeLayout(false);
             this.Tab_UserPreset.ResumeLayout(false);
             this.Tab_UserPreset.PerformLayout();
+            this.Tab_GamePreset.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
